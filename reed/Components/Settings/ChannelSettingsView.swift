@@ -16,7 +16,8 @@ struct ChannelSettingsView: View {
    
     var body: some View {
         List(channels, id: \.id) { channel in
-            ChannelSettingsRow(channel: channel)
+            ChannelSettingsRow(channel: channel, retrieveChannels: retrieveChannels)
+                .environment(\.managedObjectContext, viewContext)
         }
         .padding(8)
         .onAppear(perform: retrieveChannels)
