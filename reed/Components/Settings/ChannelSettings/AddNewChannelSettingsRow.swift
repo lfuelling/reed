@@ -52,9 +52,42 @@ struct AddNewChannelSettingsRow: View {
         c.setValue(feed.ttl, forKey: "ttl")
         c.setValue(feedURL.absoluteString, forKey: "updateUri")
         do {
-           try viewContext.save()
-          } catch {
+            try viewContext.save()
+        } catch {
             print("Failed saving Channel with id '" + id.uuidString + "'!")
+        }
+        return id
+    }
+    
+    func getCategoryString (categories: [RSSFeedItemCategory]) -> String {
+        var res = "["
+        categories.forEach({cat in
+            res += cat.value! + ","
+        })
+        res.remove(at: res.index(before: res.endIndex)) // remove trailing comma
+        res += "]"
+        return res
+    }
+    
+    func generateArticle(channelId: UUID, item: RSSFeedItem) -> UUID {
+        let articleEntity = NSEntityDescription.entity(forEntityName: "Article", in: viewContext)
+        let a = NSManagedObject(entity: articleEntity!, insertInto: viewContext)
+        let id = UUID()
+        
+        a.setValue(id, forKey: "id")
+        a.setValue(item.pubDate, forKey: "date")
+        a.setValue(item.title, forKey: "title")
+        a.setValue(item.description, forKey: "articleDescription")
+        a.setValue(item.link, forKey: "link")
+        a.setValue(item.guid?.value, forKey: "guid")
+        a.setValue(getCategoryString(categories: item.categories!), forKey: "categories")
+        a.setValue(item.author, forKey: "author")
+        a.setValue(item.content?.contentEncoded, forKey: "content")
+        a.setValue(channelId, forKey: "channelId")
+        do {
+            try viewContext.save()
+        } catch {
+            print("Failed saving Article with id '" + id.uuidString + "'!")
         }
         return id
     }
@@ -84,6 +117,12 @@ struct AddNewChannelSettingsRow: View {
                                     let imageId: UUID? = generateChannelImage(feed: feed)
                                     let channelId: UUID = generateChannel(feedURL: feedUrl, imageId: imageId, feed: feed)
                                     print("Successfully created channel '" + channelId.uuidString + "'!")
+                                    
+                                    feed.items?.forEach({item in
+                                        let articleId: UUID = generateArticle(channelId: channelId, item: item)
+                                        print("Successfully created article '" + articleId.uuidString + "'!")
+                                    })
+                                    
                                     newChannelUrl = ""
                                     break
                                 default:
