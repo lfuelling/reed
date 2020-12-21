@@ -10,6 +10,7 @@
 		CAE9AB7A25913AE900344689 /* ChannelSettingsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE9AB7925913AE900344689 /* ChannelSettingsRow.swift */; };
 		CAE9AB802591434500344689 /* AddNewChannelSettingsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE9AB7F2591434500344689 /* AddNewChannelSettingsRow.swift */; };
 		CAE9AB8C2591488D00344689 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = CAE9AB8B2591488D00344689 /* FeedKit */; };
+		CAE9AB94259165F200344689 /* ChannelRefreshStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE9AB93259165F200344689 /* ChannelRefreshStuff.swift */; };
 		CAFAC8132590FAF80094B699 /* ReedApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC8122590FAF80094B699 /* ReedApp.swift */; };
 		CAFAC8172590FAF90094B699 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CAFAC8162590FAF90094B699 /* Assets.xcassets */; };
 		CAFAC81A2590FAF90094B699 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CAFAC8192590FAF90094B699 /* Preview Assets.xcassets */; };
@@ -47,6 +48,7 @@
 /* Begin PBXFileReference section */
 		CAE9AB7925913AE900344689 /* ChannelSettingsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSettingsRow.swift; sourceTree = "<group>"; };
 		CAE9AB7F2591434500344689 /* AddNewChannelSettingsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewChannelSettingsRow.swift; sourceTree = "<group>"; };
+		CAE9AB93259165F200344689 /* ChannelRefreshStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelRefreshStuff.swift; sourceTree = "<group>"; };
 		CAFAC80F2590FAF80094B699 /* reed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CAFAC8122590FAF80094B699 /* ReedApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReedApp.swift; sourceTree = "<group>"; };
 		CAFAC8162590FAF90094B699 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 				CAFAC84B2590FDD50094B699 /* DummyStores.swift */,
 				CAFAC8A1259121040094B699 /* reedModel.xcdatamodeld */,
 				CAFAC8F3259123320094B699 /* Persistence.swift */,
+				CAE9AB93259165F200344689 /* ChannelRefreshStuff.swift */,
 			);
 			path = reed;
 			sourceTree = "<group>";
@@ -332,6 +335,7 @@
 				CAFAC88425910E1B0094B699 /* SettingsView.swift in Sources */,
 				CAFAC860259104720094B699 /* ArticleView.swift in Sources */,
 				CAFAC84C2590FDD50094B699 /* DummyStores.swift in Sources */,
+				CAE9AB94259165F200344689 /* ChannelRefreshStuff.swift in Sources */,
 				CAFAC8F4259123320094B699 /* Persistence.swift in Sources */,
 				CAFAC88A25910EFE0094B699 /* GeneralSettingsView.swift in Sources */,
 				CAFAC89225910F100094B699 /* ChannelSettingsView.swift in Sources */,

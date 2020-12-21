@@ -8,6 +8,7 @@
 import SwiftUI
 import Cocoa
 import CoreData
+import FeedKit
 
 @main
 struct ReedApp: App {
@@ -57,6 +58,44 @@ struct ReedApp: App {
         }
     }
     
+    func refetchAllFeeds() {
+        allChannels.forEach({channel in
+            if let feedUrl = URL(string: channel.updateUri!) {
+            let parser = FeedParser(URL: feedUrl)
+            
+            // Parse asynchronously, not to block the UI.
+            parser.parseAsync(queue: DispatchQueue.global(qos: .userInitiated)) {(result) in
+                
+                switch result {
+                case .success(let feed):
+                    switch feed {
+                    case .rss(let feed):
+                        persistFeed(ctx: persistenceController.container.viewContext, feed: feed, feedUrl: feedUrl)
+                        break
+                    default:
+                        print("Currently only RSS is supported!")
+                        break
+                    }
+                    
+                    
+                    DispatchQueue.main.async {
+                        // Refresh UI
+                        print("Done fetching '" + channel.updateUri! + "'!")
+                    }
+                    
+                case .failure(let error):
+                    print("Error parsing feed!")
+                    print(error)
+                }
+            }
+                
+            } else {
+                // TODO: show error
+            }
+        })
+        refreshChannels()
+    }
+    
     var body: some Scene {
         WindowGroup {
             NavigationView {
@@ -91,8 +130,7 @@ struct ReedApp: App {
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button("􀅈") {
-                        refreshChannels()
-                        // TODO: actually refresh the data instead of only the views...
+                        refetchAllFeeds()
                     }
                 }
             }
