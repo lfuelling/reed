@@ -13,8 +13,6 @@
 		CAFAC81A2590FAF90094B699 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CAFAC8192590FAF90094B699 /* Preview Assets.xcassets */; };
 		CAFAC8262590FAF90094B699 /* reedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC8252590FAF90094B699 /* reedTests.swift */; };
 		CAFAC8312590FAF90094B699 /* reedUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC8302590FAF90094B699 /* reedUITests.swift */; };
-		CAFAC8422590FB8B0094B699 /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC8412590FB8B0094B699 /* Article.swift */; };
-		CAFAC8472590FCA70094B699 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC8462590FCA70094B699 /* Channel.swift */; };
 		CAFAC84C2590FDD50094B699 /* DummyStores.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC84B2590FDD50094B699 /* DummyStores.swift */; };
 		CAFAC8512590FF710094B699 /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC8502590FF710094B699 /* Sidebar.swift */; };
 		CAFAC857259101D90094B699 /* ChannelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC856259101D90094B699 /* ChannelView.swift */; };
@@ -23,6 +21,9 @@
 		CAFAC88A25910EFE0094B699 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC88925910EFE0094B699 /* GeneralSettingsView.swift */; };
 		CAFAC89225910F100094B699 /* ChannelSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC89125910F100094B699 /* ChannelSettingsView.swift */; };
 		CAFAC89825910F220094B699 /* AdvancedSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC89725910F220094B699 /* AdvancedSettingsView.swift */; };
+		CAFAC89D2591157C0094B699 /* ChannelTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC89C2591157C0094B699 /* ChannelTable.swift */; };
+		CAFAC8A3259121040094B699 /* reedModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC8A1259121040094B699 /* reedModel.xcdatamodeld */; };
+		CAFAC8F4259123320094B699 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC8F3259123320094B699 /* Persistence.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,8 +57,6 @@
 		CAFAC82C2590FAF90094B699 /* reedUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = reedUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CAFAC8302590FAF90094B699 /* reedUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reedUITests.swift; sourceTree = "<group>"; };
 		CAFAC8322590FAF90094B699 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CAFAC8412590FB8B0094B699 /* Article.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Article.swift; sourceTree = "<group>"; };
-		CAFAC8462590FCA70094B699 /* Channel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
 		CAFAC84B2590FDD50094B699 /* DummyStores.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyStores.swift; sourceTree = "<group>"; };
 		CAFAC8502590FF710094B699 /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
 		CAFAC856259101D90094B699 /* ChannelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelView.swift; sourceTree = "<group>"; };
@@ -66,6 +65,9 @@
 		CAFAC88925910EFE0094B699 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		CAFAC89125910F100094B699 /* ChannelSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSettingsView.swift; sourceTree = "<group>"; };
 		CAFAC89725910F220094B699 /* AdvancedSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsView.swift; sourceTree = "<group>"; };
+		CAFAC89C2591157C0094B699 /* ChannelTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelTable.swift; sourceTree = "<group>"; };
+		CAFAC8A2259121040094B699 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		CAFAC8F3259123320094B699 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,7 +118,6 @@
 		CAFAC8112590FAF80094B699 /* reed */ = {
 			isa = PBXGroup;
 			children = (
-				CAFAC85B259101E90094B699 /* Entities */,
 				CAFAC855259101CA0094B699 /* Components */,
 				CAFAC8122590FAF80094B699 /* ReedApp.swift */,
 				CAFAC8142590FAF80094B699 /* ContentView.swift */,
@@ -125,6 +126,8 @@
 				CAFAC81C2590FAF90094B699 /* reed.entitlements */,
 				CAFAC8182590FAF90094B699 /* Preview Content */,
 				CAFAC84B2590FDD50094B699 /* DummyStores.swift */,
+				CAFAC8A1259121040094B699 /* reedModel.xcdatamodeld */,
+				CAFAC8F3259123320094B699 /* Persistence.swift */,
 			);
 			path = reed;
 			sourceTree = "<group>";
@@ -162,26 +165,18 @@
 				CAFAC8502590FF710094B699 /* Sidebar.swift */,
 				CAFAC856259101D90094B699 /* ChannelView.swift */,
 				CAFAC85F259104720094B699 /* ArticleView.swift */,
-				CAFAC88325910E1B0094B699 /* SettingsView.swift */,
 			);
 			path = Components;
-			sourceTree = "<group>";
-		};
-		CAFAC85B259101E90094B699 /* Entities */ = {
-			isa = PBXGroup;
-			children = (
-				CAFAC8412590FB8B0094B699 /* Article.swift */,
-				CAFAC8462590FCA70094B699 /* Channel.swift */,
-			);
-			path = Entities;
 			sourceTree = "<group>";
 		};
 		CAFAC88825910EF10094B699 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				CAFAC88325910E1B0094B699 /* SettingsView.swift */,
 				CAFAC88925910EFE0094B699 /* GeneralSettingsView.swift */,
 				CAFAC89125910F100094B699 /* ChannelSettingsView.swift */,
 				CAFAC89725910F220094B699 /* AdvancedSettingsView.swift */,
+				CAFAC89C2591157C0094B699 /* ChannelTable.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -319,17 +314,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CAFAC8A3259121040094B699 /* reedModel.xcdatamodeld in Sources */,
 				CAFAC8152590FAF80094B699 /* ContentView.swift in Sources */,
-				CAFAC8472590FCA70094B699 /* Channel.swift in Sources */,
 				CAFAC8132590FAF80094B699 /* ReedApp.swift in Sources */,
 				CAFAC88425910E1B0094B699 /* SettingsView.swift in Sources */,
+				CAFAC89D2591157C0094B699 /* ChannelTable.swift in Sources */,
 				CAFAC860259104720094B699 /* ArticleView.swift in Sources */,
 				CAFAC84C2590FDD50094B699 /* DummyStores.swift in Sources */,
+				CAFAC8F4259123320094B699 /* Persistence.swift in Sources */,
 				CAFAC88A25910EFE0094B699 /* GeneralSettingsView.swift in Sources */,
 				CAFAC89225910F100094B699 /* ChannelSettingsView.swift in Sources */,
 				CAFAC8512590FF710094B699 /* Sidebar.swift in Sources */,
 				CAFAC857259101D90094B699 /* ChannelView.swift in Sources */,
-				CAFAC8422590FB8B0094B699 /* Article.swift in Sources */,
 				CAFAC89825910F220094B699 /* AdvancedSettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -645,6 +641,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		CAFAC8A1259121040094B699 /* reedModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				CAFAC8A2259121040094B699 /* Model.xcdatamodel */,
+			);
+			currentVersion = CAFAC8A2259121040094B699 /* Model.xcdatamodel */;
+			path = reedModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = CAFAC8072590FAF80094B699 /* Project object */;
 }

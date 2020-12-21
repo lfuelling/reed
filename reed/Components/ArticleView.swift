@@ -13,10 +13,10 @@ struct ArticleView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text(article.title)
+            Text(article.title!)
                 .font(.headline)
-            Text(article.date, style: .date)
-            Text(article.content)
+            Text(article.date!, style: .date)
+            Text(article.content!)
         }
     }
 }

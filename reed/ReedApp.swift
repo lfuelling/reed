@@ -7,14 +7,17 @@
 
 import SwiftUI
 import Cocoa
+import CoreData
 
 @main
 struct ReedApp: App {
     
+    let persistenceController = PersistenceController.shared
+    
     @StateObject var channelStore = DummyChannelStore()
     @StateObject var articleStore = DummyArticleStore()
     
-    @State private var selectedChannel: UUID? = dummyChannelOne.id
+    @State private var selectedChannel: UUID? = dummyChannelOne().id
     @State private var selectedArticle: Article?
     
     var body: some Scene {
@@ -29,8 +32,8 @@ struct ReedApp: App {
                 
                 if let channelId = selectedChannel {
                     if let channel = channelStore.getChannelById(id: channelId) {
-                        if let articles = articleStore.allArticles[channel.id] {
-                            ChannelView(title: channel.title, articles: articles, selectedArticle: $selectedArticle)
+                        if let articles = articleStore.allArticles[channel.id!] {
+                            ChannelView(title: channel.title!, articles: articles, selectedArticle: $selectedArticle)
                         }
                         else {
                             Text("No articles...")
@@ -52,6 +55,7 @@ struct ReedApp: App {
         #if os(macOS)
         Settings {
             SettingsView()
+                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
         #endif
     }

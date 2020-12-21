@@ -19,11 +19,11 @@ struct Sidebar: View {
             ForEach(channelStore.allChannels, id: \.self) { channel in
                 NavigationLink(
                     destination: ChannelView(
-                        title: channel.title,
-                        articles: articleStore.allArticles[channel.id, default: []],
+                        title: channel.title!,
+                        articles: articleStore.allArticles[channel.id!, default: []],
                         selectedArticle: $selectedArticle)
                 ) {
-                    Text(verbatim: channel.title).font(.headline)
+                    Text(verbatim: channel.title!).font(.headline)
                 }
             }
         }.listStyle(SidebarListStyle())

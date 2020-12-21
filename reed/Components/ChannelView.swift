@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import CoreData
 
 struct ChannelView: View {
     let title: String
@@ -22,8 +23,8 @@ struct ChannelView: View {
                     selection: $selectedArticle
                 ) {
                     VStack(alignment: .leading) {
-                        Text(article.title)
-                        Text(article.date, style: .date)
+                        Text(article.title!)
+                        Text(article.date!, style: .date)
                     }
                 }
             }
