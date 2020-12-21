@@ -15,12 +15,17 @@ struct ChannelSettingsView: View {
     @State var channels: Array<Channel> = []
    
     var body: some View {
-        List(channels, id: \.id) { channel in
-            ChannelSettingsRow(channel: channel, retrieveChannels: retrieveChannels)
+        VStack {
+            List(channels, id: \.id) { channel in
+                ChannelSettingsRow(channel: channel, retrieveChannels: retrieveChannels)
+                    .environment(\.managedObjectContext, viewContext)
+            }.listStyle(InsetListStyle())
+            AddNewChannelSettingsRow(retrieveChannels: retrieveChannels)
                 .environment(\.managedObjectContext, viewContext)
         }
         .padding(8)
         .onAppear(perform: retrieveChannels)
+        
     }
     
     func retrieveChannels() -> Void {

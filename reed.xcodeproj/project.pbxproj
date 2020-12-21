@@ -3,13 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		CAE9AB7A25913AE900344689 /* ChannelSettingsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE9AB7925913AE900344689 /* ChannelSettingsRow.swift */; };
+		CAE9AB802591434500344689 /* AddNewChannelSettingsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE9AB7F2591434500344689 /* AddNewChannelSettingsRow.swift */; };
+		CAE9AB8C2591488D00344689 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = CAE9AB8B2591488D00344689 /* FeedKit */; };
 		CAFAC8132590FAF80094B699 /* ReedApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC8122590FAF80094B699 /* ReedApp.swift */; };
-		CAFAC8152590FAF80094B699 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC8142590FAF80094B699 /* ContentView.swift */; };
 		CAFAC8172590FAF90094B699 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CAFAC8162590FAF90094B699 /* Assets.xcassets */; };
 		CAFAC81A2590FAF90094B699 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CAFAC8192590FAF90094B699 /* Preview Assets.xcassets */; };
 		CAFAC8262590FAF90094B699 /* reedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC8252590FAF90094B699 /* reedTests.swift */; };
@@ -45,9 +46,9 @@
 
 /* Begin PBXFileReference section */
 		CAE9AB7925913AE900344689 /* ChannelSettingsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSettingsRow.swift; sourceTree = "<group>"; };
+		CAE9AB7F2591434500344689 /* AddNewChannelSettingsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewChannelSettingsRow.swift; sourceTree = "<group>"; };
 		CAFAC80F2590FAF80094B699 /* reed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CAFAC8122590FAF80094B699 /* ReedApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReedApp.swift; sourceTree = "<group>"; };
-		CAFAC8142590FAF80094B699 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		CAFAC8162590FAF90094B699 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CAFAC8192590FAF90094B699 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		CAFAC81B2590FAF90094B699 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -75,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CAE9AB8C2591488D00344689 /* FeedKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,6 +97,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CAE9AB7E2591433400344689 /* ChannelSettings */ = {
+			isa = PBXGroup;
+			children = (
+				CAFAC89125910F100094B699 /* ChannelSettingsView.swift */,
+				CAE9AB7925913AE900344689 /* ChannelSettingsRow.swift */,
+				CAE9AB7F2591434500344689 /* AddNewChannelSettingsRow.swift */,
+			);
+			path = ChannelSettings;
+			sourceTree = "<group>";
+		};
 		CAFAC8062590FAF80094B699 = {
 			isa = PBXGroup;
 			children = (
@@ -120,7 +132,6 @@
 			children = (
 				CAFAC855259101CA0094B699 /* Components */,
 				CAFAC8122590FAF80094B699 /* ReedApp.swift */,
-				CAFAC8142590FAF80094B699 /* ContentView.swift */,
 				CAFAC8162590FAF90094B699 /* Assets.xcassets */,
 				CAFAC81B2590FAF90094B699 /* Info.plist */,
 				CAFAC81C2590FAF90094B699 /* reed.entitlements */,
@@ -172,11 +183,10 @@
 		CAFAC88825910EF10094B699 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				CAE9AB7E2591433400344689 /* ChannelSettings */,
 				CAFAC88325910E1B0094B699 /* SettingsView.swift */,
 				CAFAC88925910EFE0094B699 /* GeneralSettingsView.swift */,
-				CAFAC89125910F100094B699 /* ChannelSettingsView.swift */,
 				CAFAC89725910F220094B699 /* AdvancedSettingsView.swift */,
-				CAE9AB7925913AE900344689 /* ChannelSettingsRow.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -198,6 +208,7 @@
 			);
 			name = reed;
 			packageProductDependencies = (
+				CAE9AB8B2591488D00344689 /* FeedKit */,
 			);
 			productName = reed;
 			productReference = CAFAC80F2590FAF80094B699 /* reed.app */;
@@ -271,6 +282,7 @@
 			);
 			mainGroup = CAFAC8062590FAF80094B699;
 			packageReferences = (
+				CAE9AB8A2591488D00344689 /* XCRemoteSwiftPackageReference "FeedKit" */,
 			);
 			productRefGroup = CAFAC8102590FAF80094B699 /* Products */;
 			projectDirPath = "";
@@ -315,7 +327,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CAFAC8A3259121040094B699 /* reedModel.xcdatamodeld in Sources */,
-				CAFAC8152590FAF80094B699 /* ContentView.swift in Sources */,
 				CAE9AB7A25913AE900344689 /* ChannelSettingsRow.swift in Sources */,
 				CAFAC8132590FAF80094B699 /* ReedApp.swift in Sources */,
 				CAFAC88425910E1B0094B699 /* SettingsView.swift in Sources */,
@@ -326,6 +337,7 @@
 				CAFAC89225910F100094B699 /* ChannelSettingsView.swift in Sources */,
 				CAFAC8512590FF710094B699 /* Sidebar.swift in Sources */,
 				CAFAC857259101D90094B699 /* ChannelView.swift in Sources */,
+				CAE9AB802591434500344689 /* AddNewChannelSettingsRow.swift in Sources */,
 				CAFAC89825910F220094B699 /* AdvancedSettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -641,6 +653,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CAE9AB8A2591488D00344689 /* XCRemoteSwiftPackageReference "FeedKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nmdias/FeedKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.1.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CAE9AB8B2591488D00344689 /* FeedKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CAE9AB8A2591488D00344689 /* XCRemoteSwiftPackageReference "FeedKit" */;
+			productName = FeedKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		CAFAC8A1259121040094B699 /* reedModel.xcdatamodeld */ = {

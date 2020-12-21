@@ -17,9 +17,9 @@ struct ReedApp: App {
     @State private var selectedChannel: UUID? = nil
     @State private var selectedArticle: Article?
     
-    init() {
+    /*init() {
         generateDummyData(persistenceController.container.viewContext)
-    }
+    }*/
     
     func getChannelById(id: UUID) -> Channel? {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Channel")
