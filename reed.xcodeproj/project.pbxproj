@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CAE9AB7A25913AE900344689 /* ChannelSettingsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE9AB7925913AE900344689 /* ChannelSettingsRow.swift */; };
 		CAFAC8132590FAF80094B699 /* ReedApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC8122590FAF80094B699 /* ReedApp.swift */; };
 		CAFAC8152590FAF80094B699 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC8142590FAF80094B699 /* ContentView.swift */; };
 		CAFAC8172590FAF90094B699 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CAFAC8162590FAF90094B699 /* Assets.xcassets */; };
@@ -21,7 +22,6 @@
 		CAFAC88A25910EFE0094B699 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC88925910EFE0094B699 /* GeneralSettingsView.swift */; };
 		CAFAC89225910F100094B699 /* ChannelSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC89125910F100094B699 /* ChannelSettingsView.swift */; };
 		CAFAC89825910F220094B699 /* AdvancedSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC89725910F220094B699 /* AdvancedSettingsView.swift */; };
-		CAFAC89D2591157C0094B699 /* ChannelTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC89C2591157C0094B699 /* ChannelTable.swift */; };
 		CAFAC8A3259121040094B699 /* reedModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC8A1259121040094B699 /* reedModel.xcdatamodeld */; };
 		CAFAC8F4259123320094B699 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC8F3259123320094B699 /* Persistence.swift */; };
 /* End PBXBuildFile section */
@@ -44,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CAE9AB7925913AE900344689 /* ChannelSettingsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSettingsRow.swift; sourceTree = "<group>"; };
 		CAFAC80F2590FAF80094B699 /* reed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CAFAC8122590FAF80094B699 /* ReedApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReedApp.swift; sourceTree = "<group>"; };
 		CAFAC8142590FAF80094B699 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -65,7 +66,6 @@
 		CAFAC88925910EFE0094B699 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		CAFAC89125910F100094B699 /* ChannelSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSettingsView.swift; sourceTree = "<group>"; };
 		CAFAC89725910F220094B699 /* AdvancedSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsView.swift; sourceTree = "<group>"; };
-		CAFAC89C2591157C0094B699 /* ChannelTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelTable.swift; sourceTree = "<group>"; };
 		CAFAC8A2259121040094B699 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		CAFAC8F3259123320094B699 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -176,7 +176,7 @@
 				CAFAC88925910EFE0094B699 /* GeneralSettingsView.swift */,
 				CAFAC89125910F100094B699 /* ChannelSettingsView.swift */,
 				CAFAC89725910F220094B699 /* AdvancedSettingsView.swift */,
-				CAFAC89C2591157C0094B699 /* ChannelTable.swift */,
+				CAE9AB7925913AE900344689 /* ChannelSettingsRow.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -316,9 +316,9 @@
 			files = (
 				CAFAC8A3259121040094B699 /* reedModel.xcdatamodeld in Sources */,
 				CAFAC8152590FAF80094B699 /* ContentView.swift in Sources */,
+				CAE9AB7A25913AE900344689 /* ChannelSettingsRow.swift in Sources */,
 				CAFAC8132590FAF80094B699 /* ReedApp.swift in Sources */,
 				CAFAC88425910E1B0094B699 /* SettingsView.swift in Sources */,
-				CAFAC89D2591157C0094B699 /* ChannelTable.swift in Sources */,
 				CAFAC860259104720094B699 /* ArticleView.swift in Sources */,
 				CAFAC84C2590FDD50094B699 /* DummyStores.swift in Sources */,
 				CAFAC8F4259123320094B699 /* Persistence.swift in Sources */,

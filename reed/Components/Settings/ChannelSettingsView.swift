@@ -12,28 +12,24 @@ struct ChannelSettingsView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
     
-    @State var channels: Array<Channel>? = nil
+    @State var channels: Array<Channel> = []
    
     var body: some View {
-        ChannelNSTable(
-            channels: self.$channels
-        )
-        .padding(20)
-        .frame(width: 350, height: 100)
-        .onAppear(perform: retrievePlayers)
+        List(channels, id: \.id) { channel in
+            ChannelSettingsRow(channel: channel)
+        }
+        .padding(8)
+        .onAppear(perform: retrieveChannels)
     }
     
-    func retrievePlayers() -> Void {
-        self.channels = nil
+    func retrieveChannels() -> Void {
+        self.channels = []
         
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Channel")
         request.returnsObjectsAsFaults = false
         do {
             let result = try viewContext.fetch(request)
-            for data in result as! [NSManagedObject] {
-               print(data.value(forKey: "title") as! String)
-          }
-            
+            self.channels = result as! [Channel]
         } catch {
             print("Failed to get channels!")
         }
