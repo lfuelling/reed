@@ -13,12 +13,12 @@ struct Sidebar: View {
     
     var allChannels: [Channel]
     
-    @Binding var selectedChannel: UUID?
+    @Binding var selectedChannel: Channel?
     @Binding var selectedArticle: Article?
 
     var body: some View {
         List(selection: $selectedChannel) {
-            ForEach(allChannels, id: \.self) { channel in
+            ForEach(allChannels, id: \.id) { channel in
                 NavigationLink(
                     destination: ChannelView(
                         title: channel.title!,

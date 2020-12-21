@@ -13,13 +13,10 @@ import CoreData
 struct ReedApp: App {
     
     let persistenceController = PersistenceController.shared
-
-    @State private var selectedChannel: UUID? = nil
-    @State private var selectedArticle: Article?
     
-    /*init() {
-        generateDummyData(persistenceController.container.viewContext)
-    }*/
+    @State private var selectedChannel: Channel? = nil
+    @State private var selectedArticle: Article? = nil
+    @State private var allChannels: [Channel] = []
     
     func getChannelById(id: UUID) -> Channel? {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Channel")
@@ -48,30 +45,29 @@ struct ReedApp: App {
         return []
     }
     
-    func getAllChannels() -> [Channel] {
+    func refreshChannels() -> Void {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Channel")
         request.returnsObjectsAsFaults = false
         do {
             let result = try persistenceController.container.viewContext.fetch(request)
-            return result as! [Channel]
-            
+            allChannels = result as! [Channel]
         } catch {
+            // TODO: better error handling
             print("Failed to find channels!")
         }
-        return []
     }
     
     var body: some Scene {
         WindowGroup {
             NavigationView {
                 Sidebar (
-                    allChannels: getAllChannels(),
+                    allChannels: allChannels,
                     selectedChannel: $selectedChannel,
                     selectedArticle: $selectedArticle
                 )
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 
-                if let channelId = selectedChannel {
+                if let channelId = selectedChannel?.id {
                     if let channel = getChannelById(id: channelId) {
                         if let articles = getArticlesByChannelId(id: channel.id!) {
                             ChannelView(title: channel.title!, articles: articles, selectedArticle: $selectedArticle)
@@ -91,7 +87,16 @@ struct ReedApp: App {
                 } else {
                     Text("Select article...")
                 }
+            }.navigationTitle(selectedChannel?.title ?? "reed")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("􀅈") {
+                        refreshChannels()
+                        // TODO: actually refresh the data instead of only the views...
+                    }
+                }
             }
+            .onAppear(perform: refreshChannels)
         }
         #if os(macOS)
         Settings {
