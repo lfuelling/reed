@@ -21,7 +21,7 @@ struct ChannelSettingsView: View {
             List(channels, id: \.id) { channel in
                 ChannelSettingsRow(channel: channel, persistenceProvider: persistenceProvider, retrieveChannels: retrieveChannels)
             }.listStyle(InsetListStyle())
-            AddNewChannelSettingsRow(persistenceProvider: persistenceProvider, retrieveChannels: retrieveChannels)
+            AddNewChannelSettingsRow(persistenceProvider: persistenceProvider, retrieveChannels: retrieveChannelsAndRefresh)
         }
         .padding(8)
         .onAppear(perform: retrieveChannels)
@@ -30,6 +30,10 @@ struct ChannelSettingsView: View {
     
     func retrieveChannels() -> Void {
         self.channels = persistenceProvider.channels.getAll()
+    }
+    
+    func retrieveChannelsAndRefresh() -> Void {
+        retrieveChannels()
         refresh()
     }
 }
