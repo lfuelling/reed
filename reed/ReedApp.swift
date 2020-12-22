@@ -12,85 +12,51 @@ import FeedKit
 
 @main
 struct ReedApp: App {
-    
-    let persistenceController = PersistenceController.shared
+
+    let persistenceProvider = PersistenceProvider(ctx: PersistenceController.shared.container.viewContext)
     
     @State private var selectedChannel: Channel? = nil
     @State private var selectedArticle: Article? = nil
     @State private var allChannels: [Channel] = []
     
-    func getChannelById(id: UUID) -> Channel? {
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Channel")
-        request.predicate = NSPredicate(format: "id = %@", id.uuidString)
-        request.returnsObjectsAsFaults = false
-        do {
-            let result = try persistenceController.container.viewContext.fetch(request)
-            return result[0] as? Channel
-        } catch {
-            print("Failed to find channel by id '" + id.uuidString + "'")
-        }
-        return nil
-    }
-    
-    func getArticlesByChannelId(id: UUID) -> [Article] {
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Article")
-        request.predicate = NSPredicate(format: "channelId = %@", id.uuidString)
-        request.returnsObjectsAsFaults = false
-        do {
-            let result = try persistenceController.container.viewContext.fetch(request)
-            return result as! [Article]
-            
-        } catch {
-            print("Failed to find articles for channel with id '" + id.uuidString + "'")
-        }
-        return []
-    }
-    
     func refreshChannels() -> Void {
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Channel")
-        request.returnsObjectsAsFaults = false
-        do {
-            let result = try persistenceController.container.viewContext.fetch(request)
-            allChannels = result as! [Channel]
-        } catch {
-            // TODO: better error handling
-            print("Failed to find channels!")
-        }
+        allChannels = persistenceProvider.channels.getAll()
     }
     
     func refetchAllFeeds() {
         allChannels.forEach({channel in
-            if let feedUrl = URL(string: channel.updateUri!) {
-            let parser = FeedParser(URL: feedUrl)
-            
-            // Parse asynchronously, not to block the UI.
-            parser.parseAsync(queue: DispatchQueue.global(qos: .userInitiated)) {(result) in
+            if(channel.updateUri != nil) {
+                if let feedUrl = URL(string: channel.updateUri!) {
+                let parser = FeedParser(URL: feedUrl)
                 
-                switch result {
-                case .success(let feed):
-                    switch feed {
-                    case .rss(let feed):
-                        persistFeed(ctx: persistenceController.container.viewContext, feed: feed, feedUrl: feedUrl)
-                        break
-                    default:
-                        print("Currently only RSS is supported!")
-                        break
+                // Parse asynchronously, not to block the UI.
+                parser.parseAsync(queue: DispatchQueue.global(qos: .userInitiated)) {(result) in
+                    
+                    switch result {
+                    case .success(let feed):
+                        switch feed {
+                        case .rss(let feed):
+                            persistenceProvider.persistFeed(feed: feed, feedUrl: feedUrl)
+                            break
+                        default:
+                            print("Currently only RSS is supported!")
+                            break
+                        }
+                        
+                        DispatchQueue.main.async {
+                            // Refresh UI
+                            print("Done fetching '" + channel.updateUri! + "'!")
+                        }
+                        
+                    case .failure(let error):
+                        print("Error parsing feed!")
+                        print(error)
                     }
-                    
-                    
-                    DispatchQueue.main.async {
-                        // Refresh UI
-                        print("Done fetching '" + channel.updateUri! + "'!")
-                    }
-                    
-                case .failure(let error):
-                    print("Error parsing feed!")
-                    print(error)
                 }
-            }
-                
-            } else {
-                // TODO: show error
+                    
+                } else {
+                    // TODO: show error
+                }
             }
         })
         refreshChannels()
@@ -100,15 +66,14 @@ struct ReedApp: App {
         WindowGroup {
             NavigationView {
                 Sidebar (
-                    allChannels: allChannels,
+                    persistenceProvider: persistenceProvider,
                     selectedChannel: $selectedChannel,
                     selectedArticle: $selectedArticle
                 )
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 
                 if let channelId = selectedChannel?.id {
-                    if let channel = getChannelById(id: channelId) {
-                        if let articles = getArticlesByChannelId(id: channel.id!) {
+                    if let channel = persistenceProvider.channels.getById(id: channelId) {
+                        if let articles = persistenceProvider.articles.getByChannelId(channelId: channel.id!) {
                             ChannelView(title: channel.title!, articles: articles, selectedArticle: $selectedArticle)
                         }
                         else {
@@ -130,6 +95,7 @@ struct ReedApp: App {
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button("􀅈") {
+                        refreshChannels()
                         refetchAllFeeds()
                     }
                 }
@@ -138,8 +104,7 @@ struct ReedApp: App {
         }
         #if os(macOS)
         Settings {
-            SettingsView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            SettingsView(persistenceProvider: persistenceProvider)
         }
         #endif
     }

@@ -9,11 +9,11 @@ import Foundation
 import SwiftUI
 
 struct ChannelSettingsRow: View {
-    @Environment(\.managedObjectContext) private var viewContext
     
     @State private var showingDeletionConfirmation = false
     
     var channel: Channel
+    var persistenceProvider: PersistenceProvider
     var retrieveChannels: () -> Void
     
     var body: some View {
@@ -33,12 +33,7 @@ struct ChannelSettingsRow: View {
                         title: Text("Are you sure?"),
                         message: Text("Are you sure you want to delete the channel '" + channel.title! + "'?"),
                         primaryButton: .default(Text("Yes"), action: {() -> Void in
-                            viewContext.delete(channel)
-                            do {
-                                try viewContext.save()
-                            } catch {
-                                print("Failed saving context after deleting!")
-                            }
+                            persistenceProvider.deleteChannel(channel: channel)
                             self.showingDeletionConfirmation = false
                             retrieveChannels()
                         }),

@@ -9,7 +9,8 @@ import Foundation
 import SwiftUI
 
 struct SettingsView: View {
-    @Environment(\.managedObjectContext) private var viewContext
+    
+    var persistenceProvider: PersistenceProvider
     
     private enum Tabs: Hashable {
         case general, channels, advanced
@@ -22,12 +23,11 @@ struct SettingsView: View {
                     Label("General", systemImage: "gear")
                 }
                 .tag(Tabs.general)
-            ChannelSettingsView()
+            ChannelSettingsView(persistenceProvider: persistenceProvider)
                 .tabItem {
                     Label("Channels", systemImage: "network")
                 }
                 .tag(Tabs.channels)
-                .environment(\.managedObjectContext, viewContext)
             AdvancedSettingsView()
                 .tabItem {
                     Label("Advanced", systemImage: "slider.horizontal.3")

@@ -10,12 +10,12 @@ import SwiftUI
 import FeedKit
 
 struct AddNewChannelSettingsRow: View {
-    @Environment(\.managedObjectContext) private var viewContext
     
     @State private var showingDialog: Bool = false
     @State private var newChannelUrl: String = ""
     @State private var alertMessage: String = "Fetching information..."
     
+    var persistenceProvider: PersistenceProvider
     var retrieveChannels: () -> Void
     
     var body: some View {
@@ -40,7 +40,7 @@ struct AddNewChannelSettingsRow: View {
                             case .success(let feed):
                                 switch feed {
                                 case .rss(let feed):
-                                    persistFeed(ctx: viewContext, feed: feed, feedUrl: feedUrl)
+                                    persistenceProvider.persistFeed(feed: feed, feedUrl: feedUrl)
                                     
                                     newChannelUrl = ""
                                     break

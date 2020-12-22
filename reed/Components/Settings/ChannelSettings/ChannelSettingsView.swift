@@ -10,18 +10,16 @@ import SwiftUI
 
 struct ChannelSettingsView: View {
     
-    @Environment(\.managedObjectContext) private var viewContext
+    var persistenceProvider: PersistenceProvider
     
     @State var channels: Array<Channel> = []
    
     var body: some View {
         VStack {
             List(channels, id: \.id) { channel in
-                ChannelSettingsRow(channel: channel, retrieveChannels: retrieveChannels)
-                    .environment(\.managedObjectContext, viewContext)
+                ChannelSettingsRow(channel: channel, persistenceProvider: persistenceProvider, retrieveChannels: retrieveChannels)
             }.listStyle(InsetListStyle())
-            AddNewChannelSettingsRow(retrieveChannels: retrieveChannels)
-                .environment(\.managedObjectContext, viewContext)
+            AddNewChannelSettingsRow(persistenceProvider: persistenceProvider, retrieveChannels: retrieveChannels)
         }
         .padding(8)
         .onAppear(perform: retrieveChannels)
@@ -29,15 +27,6 @@ struct ChannelSettingsView: View {
     }
     
     func retrieveChannels() -> Void {
-        self.channels = []
-        
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Channel")
-        request.returnsObjectsAsFaults = false
-        do {
-            let result = try viewContext.fetch(request)
-            self.channels = result as! [Channel]
-        } catch {
-            print("Failed to get channels!")
-        }
+        self.channels = persistenceProvider.channels.getAll()
     }
 }
