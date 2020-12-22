@@ -59,22 +59,26 @@ class ArticlePersistenceProvider {
         return a!
     }
     
-    func generate(channelId: UUID, item: RSSFeedItem) -> UUID {
-        
-        let a = getExistingOrNew(channelId: channelId, item: item)
-        
-        a.setValue(item.pubDate, forKey: "date")
-        a.setValue(item.title, forKey: "title")
-        a.setValue(item.description, forKey: "articleDescription")
-        a.setValue(item.link, forKey: "link")
-        a.setValue(item.guid?.value, forKey: "guid")
-        a.setValue(getCategoryString(categories: item.categories), forKey: "categories")
-        a.setValue(item.author, forKey: "author")
-        a.setValue(item.content?.contentEncoded ?? item.description, forKey: "content")
-        a.setValue(channelId, forKey: "channelId")
-        
-        let id = a.value(forKey: "id") as! UUID
-        return id
+    func generate(channelId: UUID, item: RSSFeedItem) -> UUID? {
+        if(item.title == nil) {
+            print("Error: Item has no title!")
+        } else {
+            let a = getExistingOrNew(channelId: channelId, item: item)
+            
+            a.setValue(item.pubDate, forKey: "date")
+            a.setValue(String(Array(item.title!)[0..<64]) + "…", forKey: "title")
+            a.setValue(item.description ?? item.title, forKey: "articleDescription")
+            a.setValue(item.link, forKey: "link")
+            a.setValue(item.guid?.value, forKey: "guid")
+            a.setValue(getCategoryString(categories: item.categories), forKey: "categories")
+            a.setValue(item.author, forKey: "author")
+            a.setValue(item.content?.contentEncoded ?? item.description, forKey: "content")
+            a.setValue(channelId, forKey: "channelId")
+            
+            let id = a.value(forKey: "id") as! UUID
+            return id
+        }
+        return nil
     }
     
     func getByChannelId(channelId: UUID) -> [Article] {
