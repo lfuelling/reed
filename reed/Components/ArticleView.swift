@@ -25,6 +25,18 @@ struct ArticleView: View {
         }
     }
     
+    private func getSubtitleString(article: Article, channel: Channel) -> String {
+        if let channelTitle = channel.title {
+            if let author = article.author {
+                return author + " - " + channelTitle
+            } else {
+                return channelTitle
+            }
+        } else {
+            return channel.updateUri!
+        }
+    }
+    
     var body: some View {
         if let channelSave = channel {
             VStack(alignment: .leading) {
@@ -32,7 +44,7 @@ struct ArticleView: View {
                     Text(article.title!)
                         .font(.headline)
                         .lineLimit(2)
-                    Text(channelSave.title!)
+                    Text(getSubtitleString(article: article, channel: channelSave))
                         .font(.subheadline)
                     if let date = article.date {
                         Text(date, style: .date)
