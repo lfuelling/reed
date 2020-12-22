@@ -13,6 +13,7 @@
 		CAE9AB94259165F200344689 /* ChannelPersistenceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE9AB93259165F200344689 /* ChannelPersistenceProvider.swift */; };
 		CAE9AB9A259182E800344689 /* ArticlePersistenceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE9AB99259182E800344689 /* ArticlePersistenceProvider.swift */; };
 		CAE9ABA82591844100344689 /* PersistenceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE9ABA72591844100344689 /* PersistenceProvider.swift */; };
+		CAE9ABAD2591973C00344689 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE9ABAC2591973C00344689 /* WebView.swift */; };
 		CAFAC8132590FAF80094B699 /* ReedApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC8122590FAF80094B699 /* ReedApp.swift */; };
 		CAFAC8172590FAF90094B699 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CAFAC8162590FAF90094B699 /* Assets.xcassets */; };
 		CAFAC81A2590FAF90094B699 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CAFAC8192590FAF90094B699 /* Preview Assets.xcassets */; };
@@ -53,6 +54,7 @@
 		CAE9AB93259165F200344689 /* ChannelPersistenceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelPersistenceProvider.swift; sourceTree = "<group>"; };
 		CAE9AB99259182E800344689 /* ArticlePersistenceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlePersistenceProvider.swift; sourceTree = "<group>"; };
 		CAE9ABA72591844100344689 /* PersistenceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceProvider.swift; sourceTree = "<group>"; };
+		CAE9ABAC2591973C00344689 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		CAFAC80F2590FAF80094B699 /* reed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CAFAC8122590FAF80094B699 /* ReedApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReedApp.swift; sourceTree = "<group>"; };
 		CAFAC8162590FAF90094B699 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -193,6 +195,7 @@
 				CAFAC8502590FF710094B699 /* Sidebar.swift */,
 				CAFAC856259101D90094B699 /* ChannelView.swift */,
 				CAFAC85F259104720094B699 /* ArticleView.swift */,
+				CAE9ABAC2591973C00344689 /* WebView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -354,6 +357,7 @@
 				CAFAC8F4259123320094B699 /* Persistence.swift in Sources */,
 				CAE9AB9A259182E800344689 /* ArticlePersistenceProvider.swift in Sources */,
 				CAFAC88A25910EFE0094B699 /* GeneralSettingsView.swift in Sources */,
+				CAE9ABAD2591973C00344689 /* WebView.swift in Sources */,
 				CAFAC89225910F100094B699 /* ChannelSettingsView.swift in Sources */,
 				CAFAC8512590FF710094B699 /* Sidebar.swift in Sources */,
 				CAFAC857259101D90094B699 /* ChannelView.swift in Sources */,

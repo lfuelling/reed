@@ -7,16 +7,46 @@
 
 import Foundation
 import SwiftUI
+import WebKit
 
 struct ArticleView: View {
     let article: Article
-
+    
     var body: some View {
         VStack(alignment: .leading) {
             Text(article.title!)
                 .font(.headline)
             Text(article.date!, style: .date)
-            Text(article.content!)
+            BrowserView(url: getDataUrl()!)
+        }.padding(8)
+    }
+    
+    func getDataUrl() -> String? {
+        if var content = article.content {
+            let css = """
+img {
+    width: 100%;
+    height: auto;
+}
+body,
+html {
+    background: rgb(31,31,33);
+    color: #fff;
+    font-family: sans-serif;
+    width: 90%;
+    overflow-x: hidden;
+}
+a {
+    color: #fff;
+    font-family: sans-serif;
+}
+"""
+            content = "<html><head><meta name=\"viewport\" content=\"width=device-width\"/><style type=\"text/css\">" + css + "</style></head><body>" + content + "</body></html>"
+            let utf8str = content.data(using: .utf8)
+            return "data:text/html;base64," + (utf8str?.base64EncodedString(options: Data.Base64EncodingOptions(rawValue: 0)))!
         }
+        return nil
     }
 }
+
+
