@@ -8,8 +8,11 @@
 import Foundation
 import FeedKit
 import CoreData
+import SwiftUI
 
 class ArticlePersistenceProvider {
+    @AppStorage("sortDescending") private var sortDescending = true
+    
     private let ctx: NSManagedObjectContext
     
     init(ctx: NSManagedObjectContext) {
@@ -102,6 +105,7 @@ class ArticlePersistenceProvider {
     func getByChannelId(channelId: UUID) -> [Article] {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Article")
         request.predicate = NSPredicate(format: "channelId = %@", channelId.uuidString)
+        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: !sortDescending)]
         request.returnsObjectsAsFaults = false
         do {
             let result = try ctx.fetch(request)
