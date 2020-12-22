@@ -30,15 +30,19 @@ img {
 }
 body,
 html {
-    background: rgb(31,31,33);
-    color: #fff;
     font-family: sans-serif;
     width: 90%;
     overflow-x: hidden;
 }
-a {
-    color: #fff;
-    font-family: sans-serif;
+@media (prefers-color-scheme: dark) {
+    a {
+        color: #fff;
+        font-family: sans-serif;
+    }
+    html, body {
+        background: rgb(31,31,33);
+        color: #fff;
+    }
 }
 """
             content = "<html><head><meta name=\"viewport\" content=\"width=device-width\"/><style type=\"text/css\">" + css + "</style></head><body>" + content + "</body></html>"
@@ -48,5 +52,3 @@ a {
         return nil
     }
 }
-
-

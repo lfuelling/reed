@@ -16,16 +16,16 @@ class ArticlePersistenceProvider {
         self.ctx = ctx
     }
     
-    private func getCategoryString(categories: [RSSFeedItemCategory]) -> String {
+    private func getCategoryString(categories: [RSSFeedItemCategory]?) -> String {
         var res = "["
-        categories.forEach({cat in
+        categories?.forEach({cat in
             res += cat.value! + ","
         })
         res.remove(at: res.index(before: res.endIndex)) // remove trailing comma
         res += "]"
         return res
     }
-
+    
     func getExistingOrNew(channelId: UUID, item: RSSFeedItem) -> NSManagedObject {
         var a: NSManagedObject? = nil
         var id: UUID? = nil
@@ -58,7 +58,7 @@ class ArticlePersistenceProvider {
         }
         return a!
     }
-
+    
     func generate(channelId: UUID, item: RSSFeedItem) -> UUID {
         
         let a = getExistingOrNew(channelId: channelId, item: item)
@@ -68,17 +68,12 @@ class ArticlePersistenceProvider {
         a.setValue(item.description, forKey: "articleDescription")
         a.setValue(item.link, forKey: "link")
         a.setValue(item.guid?.value, forKey: "guid")
-        a.setValue(getCategoryString(categories: item.categories!), forKey: "categories")
+        a.setValue(getCategoryString(categories: item.categories), forKey: "categories")
         a.setValue(item.author, forKey: "author")
         a.setValue(item.content?.contentEncoded, forKey: "content")
         a.setValue(channelId, forKey: "channelId")
         
         let id = a.value(forKey: "id") as! UUID
-        do {
-            try ctx.save()
-        } catch {
-            print("Failed saving Article with id '" + id.uuidString + "'!")
-        }
         return id
     }
     

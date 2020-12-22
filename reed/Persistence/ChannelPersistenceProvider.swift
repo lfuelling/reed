@@ -26,11 +26,6 @@ class ChannelPersistenceProvider {
             ci.setValue(feed.image?.url, forKey: "url")
             ci.setValue(feed.image?.title, forKey: "title")
             ci.setValue(feed.image?.link, forKey: "link")
-            do {
-                try ctx.save()
-            } catch {
-                print("Failed saving ChannelImage with id '" + id.uuidString + "'!")
-            }
             return id
         }
         return nil
@@ -83,11 +78,6 @@ class ChannelPersistenceProvider {
         c.setValue(feedURL.absoluteString, forKey: "updateUri")
         
         let id = c.value(forKey: "id") as! UUID
-        do {
-            try ctx.save()
-        } catch {
-            print("Failed saving Channel with id '" + id.uuidString + "'!")
-        }
         return id
     }
     

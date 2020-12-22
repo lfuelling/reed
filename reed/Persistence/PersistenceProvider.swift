@@ -29,6 +29,13 @@ class PersistenceProvider {
             let articleId: UUID = articles.generate(channelId: channelId, item: item)
             print("Successfully updated article '" + articleId.uuidString + "'!")
         })
+        
+        print("Saving generated data...")
+        do {
+            try ctx.save()
+        } catch {
+            print("Failed saving updated data!")
+        }
     }
     
     func deleteChannel(channel: Channel) {
