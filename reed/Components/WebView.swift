@@ -14,6 +14,12 @@ struct WebView: NSViewRepresentable {
     
     public typealias NSViewType = WKWebView
     
+    let url: URL
+    
+    init(url: URL) {
+        self.url = url
+    }
+    
     public func makeNSView(context: NSViewRepresentableContext<WebView>) -> WKWebView {
         
         webView.navigationDelegate = context.coordinator
@@ -28,8 +34,8 @@ struct WebView: NSViewRepresentable {
     
     private let webView: WKWebView = WKWebView()
     
-    public func load(url: URL) {
-        webView.load(URLRequest(url: url))
+    public func load() {
+        webView.load(URLRequest(url: self.url))
     }
     
     public class Coordinator: NSObject, WKNavigationDelegate, WKUIDelegate {
@@ -41,7 +47,20 @@ struct WebView: NSViewRepresentable {
         }
         
         public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-            decisionHandler(.allow)
+            if navigationAction.navigationType == .linkActivated  {
+                if let url = navigationAction.request.url {
+                    if NSWorkspace.shared.open(url) {
+                        print("Link opened.")
+                    }
+                    decisionHandler(.cancel)
+                } else {
+                    print("Error opening link.")
+                    decisionHandler(.allow)
+                }
+            } else {
+                decisionHandler(.allow)
+            }
+            
         }
         
         public func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
@@ -59,15 +78,19 @@ struct WebView: NSViewRepresentable {
 
 struct BrowserView: View {
     
-    private let browser = WebView()
-    
+    private let browser: WebView
     var url: String
+    
+    init(url: String) {
+        self.url = url
+        self.browser = WebView(url: URL(string: url)!)
+    }
     
     var body: some View {
         HStack {
             browser
                 .onAppear() {
-                    self.browser.load(url: URL(string: url)!)
+                    self.browser.load()
                 }
         }
         .padding()
