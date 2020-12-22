@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CA1EC7162592B11A00AF241E /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = CA1EC7152592B11A00AF241E /* Credits.rtf */; };
 		CAE9AB7A25913AE900344689 /* ChannelSettingsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE9AB7925913AE900344689 /* ChannelSettingsRow.swift */; };
 		CAE9AB802591434500344689 /* AddNewChannelSettingsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE9AB7F2591434500344689 /* AddNewChannelSettingsRow.swift */; };
 		CAE9AB8C2591488D00344689 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = CAE9AB8B2591488D00344689 /* FeedKit */; };
@@ -49,6 +50,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CA1EC7152592B11A00AF241E /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		CAE9AB7925913AE900344689 /* ChannelSettingsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSettingsRow.swift; sourceTree = "<group>"; };
 		CAE9AB7F2591434500344689 /* AddNewChannelSettingsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewChannelSettingsRow.swift; sourceTree = "<group>"; };
 		CAE9AB93259165F200344689 /* ChannelPersistenceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelPersistenceProvider.swift; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 				CAFAC84B2590FDD50094B699 /* DummyStores.swift */,
 				CAFAC8A1259121040094B699 /* reedModel.xcdatamodeld */,
 				CAFAC8F3259123320094B699 /* Persistence.swift */,
+				CA1EC7152592B11A00AF241E /* Credits.rtf */,
 			);
 			path = reed;
 			sourceTree = "<group>";
@@ -299,6 +302,7 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
 			);
 			mainGroup = CAFAC8062590FAF80094B699;
 			packageReferences = (
@@ -321,6 +325,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CAFAC81A2590FAF90094B699 /* Preview Assets.xcassets in Resources */,
+				CA1EC7162592B11A00AF241E /* Credits.rtf in Resources */,
 				CAFAC8172590FAF90094B699 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -529,6 +534,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = sh.lrk.reed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -551,6 +557,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = sh.lrk.reed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

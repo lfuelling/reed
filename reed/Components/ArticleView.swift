@@ -10,6 +10,9 @@ import SwiftUI
 import WebKit
 
 struct ArticleView: View {
+    
+    @AppStorage("fontSize") private var fontSize = 14.0
+    
     private let article: Article
     private let channel: Channel?
     
@@ -48,14 +51,15 @@ struct ArticleView: View {
     private func _getDataUrl(content: String) -> String {
         let css = """
 img {
-width: 100%;
-height: auto;
+    width: 100%;
+    height: auto;
 }
 body,
 html {
-font-family: sans-serif;
-width: 90%;
-overflow-x: hidden;
+    font-family: sans-serif;
+    width: 90%;
+    overflow-x: hidden;
+    font-size: \(fontSize)px
 }
 @media (prefers-color-scheme: dark) {
 a {

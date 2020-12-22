@@ -29,9 +29,9 @@ class ArticlePersistenceProvider {
     func getExistingOrNew(channelId: UUID, item: RSSFeedItem) -> NSManagedObject {
         var a: NSManagedObject? = nil
         var id: UUID? = nil
-        if let itemGuid = item.guid?.value {
+        if let itemLink = item.link {
             let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Article")
-            request.predicate = NSPredicate(format: "guid = %@ AND channelId = %@", itemGuid, channelId.uuidString)
+            request.predicate = NSPredicate(format: "link = %@ AND channelId = %@", itemLink, channelId.uuidString)
             request.returnsObjectsAsFaults = false
             do {
                 let result = try ctx.fetch(request) as! [NSManagedObject]
@@ -42,7 +42,7 @@ class ArticlePersistenceProvider {
                 }
             } catch {
                 // TODO: better error handling
-                print("Failed to find any existing article with guid '" + itemGuid + "'!")
+                print("Failed to find any existing article with link '" + itemLink + "'!")
             }
         }
         
