@@ -26,7 +26,7 @@ struct SettingsView: View {
                 .tag(Tabs.general)
             ChannelSettingsView(persistenceProvider: persistenceProvider, refresh: refresh)
                 .tabItem {
-                    Label("Channels", systemImage: "network")
+                    Label("Channels", systemImage: "newspaper")
                 }
                 .tag(Tabs.channels)
             AdvancedSettingsView()
