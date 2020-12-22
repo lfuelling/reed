@@ -28,14 +28,16 @@ struct ArticleView: View {
                 VStack(alignment: .leading) {
                     Text(article.title!)
                         .font(.headline)
+                        .lineLimit(2)
                     Text(channelSave.title!)
+                        .font(.subheadline)
                     if let date = article.date {
                         Text(date, style: .date)
                     }
-                }.padding(8)
+                }.padding(16)
                 Divider()
                 BrowserView(url: getDataUrl())
-            }.padding(8)
+            }
         }
     }
     
@@ -61,7 +63,7 @@ a {
     font-family: sans-serif;
 }
 html, body {
-    background: rgb(31,31,33);
+    background: rgb(34,33,35);
     color: #fff;
 }
 }

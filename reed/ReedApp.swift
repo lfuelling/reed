@@ -18,12 +18,14 @@ struct ReedApp: App {
     @State private var selectedChannel: Channel? = nil
     @State private var selectedArticle: Article? = nil
     @State private var allChannels: [Channel] = []
+    @State private var refreshing: Bool = false
     
     func refreshChannels() -> Void {
         allChannels = persistenceProvider.channels.getAll()
     }
     
     func refetchAllFeeds() {
+        refreshing = true
         allChannels.forEach({channel in
             if(channel.updateUri != nil) {
                 if let feedUrl = URL(string: channel.updateUri!) {
@@ -47,6 +49,7 @@ struct ReedApp: App {
                                 persistenceProvider.save(callback: {() -> Void in
                                     // Refresh UI
                                     refreshChannels()
+                                    refreshing = false
                                 })
                             }
                             
@@ -61,7 +64,6 @@ struct ReedApp: App {
                 }
             }
         })
-        refreshChannels()
     }
     
     var body: some Scene {
@@ -100,15 +102,19 @@ struct ReedApp: App {
                         refreshChannels()
                         refetchAllFeeds()
                     } label: {
-                        Image(systemName: "arrow.triangle.2.circlepath")
-                    }
+                        if(refreshing) {
+                            Image(systemName: "hourglass")
+                        } else {
+                            Image(systemName: "arrow.triangle.2.circlepath")
+                        }
+                    }.disabled(refreshing)
                 }
             }
             .onAppear(perform: refreshChannels)
         }
         #if os(macOS)
         Settings {
-            SettingsView(persistenceProvider: persistenceProvider)
+            SettingsView(persistenceProvider: persistenceProvider, refresh: refetchAllFeeds)
         }
         #endif
     }

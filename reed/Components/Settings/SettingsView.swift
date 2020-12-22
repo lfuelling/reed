@@ -11,6 +11,7 @@ import SwiftUI
 struct SettingsView: View {
     
     var persistenceProvider: PersistenceProvider
+    var refresh: () -> Void
     
     private enum Tabs: Hashable {
         case general, channels, advanced
@@ -23,7 +24,7 @@ struct SettingsView: View {
                     Label("General", systemImage: "gear")
                 }
                 .tag(Tabs.general)
-            ChannelSettingsView(persistenceProvider: persistenceProvider)
+            ChannelSettingsView(persistenceProvider: persistenceProvider, refresh: refresh)
                 .tabItem {
                     Label("Channels", systemImage: "network")
                 }

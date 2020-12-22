@@ -12,6 +12,8 @@ struct ChannelSettingsView: View {
     
     var persistenceProvider: PersistenceProvider
     
+    var refresh: () -> Void
+    
     @State var channels: Array<Channel> = []
    
     var body: some View {
@@ -28,5 +30,6 @@ struct ChannelSettingsView: View {
     
     func retrieveChannels() -> Void {
         self.channels = persistenceProvider.channels.getAll()
+        refresh()
     }
 }

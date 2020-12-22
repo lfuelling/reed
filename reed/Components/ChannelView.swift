@@ -26,6 +26,7 @@ struct ChannelView: View {
                     VStack(alignment: .leading) {
                         Text(article.title!)
                             .font(.headline)
+                            .lineLimit(3)
                         if let date = article.date {
                             Text(date, style: .date)
                         }
@@ -33,5 +34,6 @@ struct ChannelView: View {
                 }
             }
         }.navigationTitle(channel.title ?? "untitled")
+        .navigationSubtitle(channel.channelDescription ?? "")
     }
 }
