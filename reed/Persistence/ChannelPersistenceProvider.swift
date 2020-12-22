@@ -87,7 +87,12 @@ class ChannelPersistenceProvider {
         request.returnsObjectsAsFaults = false
         do {
             let result = try ctx.fetch(request)
-            return result[0] as? Channel
+            if(result.count > 0) {
+                return result[0] as? Channel
+            } else {
+                print("Unable to find channel by id '" + id.uuidString + "'")
+                return nil
+            }
         } catch {
             print("Failed to find channel by id '" + id.uuidString + "'")
         }

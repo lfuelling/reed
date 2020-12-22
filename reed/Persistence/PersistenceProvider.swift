@@ -23,16 +23,19 @@ class PersistenceProvider {
     func persistFeed(feed: RSSFeed, feedUrl: URL) {
         let imageId: UUID? = channels.generateImage(feed: feed)
         let channelId: UUID = channels.generate(feedURL: feedUrl, imageId: imageId, feed: feed)
-        print("Successfully created channel '" + channelId.uuidString + "'!")
+        print("Successfully updated channel '" + channelId.uuidString + "'!")
         
         feed.items?.forEach({item in
             let articleId: UUID = articles.generate(channelId: channelId, item: item)
             print("Successfully updated article '" + articleId.uuidString + "'!")
         })
-        
-        print("Saving generated data...")
+    }
+    
+    func save(callback: () -> Void) {
+        print("Saving data...")
         do {
             try ctx.save()
+            callback()
         } catch {
             print("Failed saving updated data!")
         }

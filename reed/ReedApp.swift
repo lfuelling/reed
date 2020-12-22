@@ -12,7 +12,7 @@ import FeedKit
 
 @main
 struct ReedApp: App {
-
+    
     let persistenceProvider = PersistenceProvider(ctx: PersistenceController.shared.container.viewContext)
     
     @State private var selectedChannel: Channel? = nil
@@ -27,32 +27,34 @@ struct ReedApp: App {
         allChannels.forEach({channel in
             if(channel.updateUri != nil) {
                 if let feedUrl = URL(string: channel.updateUri!) {
-                let parser = FeedParser(URL: feedUrl)
-                
-                // Parse asynchronously, not to block the UI.
-                parser.parseAsync(queue: DispatchQueue.global(qos: .userInitiated)) {(result) in
+                    let parser = FeedParser(URL: feedUrl)
                     
-                    switch result {
-                    case .success(let feed):
-                        switch feed {
-                        case .rss(let feed):
-                            persistenceProvider.persistFeed(feed: feed, feedUrl: feedUrl)
-                            break
-                        default:
-                            print("Currently only RSS is supported!")
-                            break
-                        }
+                    // Parse asynchronously, not to block the UI.
+                    parser.parseAsync(queue: DispatchQueue.global(qos: .userInitiated)) {(result) in
                         
-                        DispatchQueue.main.async {
-                            // Refresh UI
-                            print("Done fetching '" + channel.updateUri! + "'!")
+                        switch result {
+                        case .success(let feed):
+                            switch feed {
+                            case .rss(let feed):
+                                persistenceProvider.persistFeed(feed: feed, feedUrl: feedUrl)
+                                break
+                            default:
+                                print("Currently only RSS is supported!")
+                                break
+                            }
+                            
+                            DispatchQueue.main.async {
+                                persistenceProvider.save(callback: {() -> Void in
+                                    // Refresh UI
+                                    refreshChannels()
+                                })
+                            }
+                            
+                        case .failure(let error):
+                            print("Error parsing feed!")
+                            print(error)
                         }
-                        
-                    case .failure(let error):
-                        print("Error parsing feed!")
-                        print(error)
                     }
-                }
                     
                 } else {
                     // TODO: show error
@@ -94,9 +96,11 @@ struct ReedApp: App {
             }.navigationTitle(selectedChannel?.title ?? "reed")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button("􀅈") {
+                    Button {
                         refreshChannels()
                         refetchAllFeeds()
+                    } label: {
+                        Image(systemName: "arrow.triangle.2.circlepath")
                     }
                 }
             }

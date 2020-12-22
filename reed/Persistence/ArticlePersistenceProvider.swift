@@ -70,7 +70,7 @@ class ArticlePersistenceProvider {
         a.setValue(item.guid?.value, forKey: "guid")
         a.setValue(getCategoryString(categories: item.categories), forKey: "categories")
         a.setValue(item.author, forKey: "author")
-        a.setValue(item.content?.contentEncoded, forKey: "content")
+        a.setValue(item.content?.contentEncoded ?? item.description, forKey: "content")
         a.setValue(channelId, forKey: "channelId")
         
         let id = a.value(forKey: "id") as! UUID

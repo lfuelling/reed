@@ -26,7 +26,9 @@ struct ChannelView: View {
                     VStack(alignment: .leading) {
                         Text(article.title!)
                             .font(.headline)
-                        Text(article.date!, style: .date)
+                        if let date = article.date {
+                            Text(date, style: .date)
+                        }
                     }
                 }
             }

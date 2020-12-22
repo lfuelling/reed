@@ -51,9 +51,11 @@ struct AddNewChannelSettingsRow: View {
                                 
                                 
                                 DispatchQueue.main.async {
-                                    // Refresh UI
-                                    retrieveChannels()
-                                    self.showingDialog = false
+                                    persistenceProvider.save(callback: {() -> Void in
+                                        // Refresh UI
+                                        retrieveChannels()
+                                        self.showingDialog = false
+                                    })
                                 }
                                 
                             case .failure(let error):
