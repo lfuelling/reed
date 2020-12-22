@@ -74,7 +74,7 @@ struct ReedApp: App {
                 if let channelId = selectedChannel?.id {
                     if let channel = persistenceProvider.channels.getById(id: channelId) {
                         if let articles = persistenceProvider.articles.getByChannelId(channelId: channel.id!) {
-                            ChannelView(title: channel.title!, articles: articles, selectedArticle: $selectedArticle)
+                            ChannelView(articles: articles, channel: channel, persistenceProvider: persistenceProvider, selectedArticle: $selectedArticle)
                         }
                         else {
                             Text("No articles...")
@@ -87,7 +87,7 @@ struct ReedApp: App {
                 }
                 
                 if let article = selectedArticle {
-                    ArticleView(article: article)
+                    ArticleView(article: article, persistenceProvider: persistenceProvider)
                 } else {
                     Text("Select article...")
                 }

@@ -10,13 +10,27 @@ import SwiftUI
 import WebKit
 
 struct ArticleView: View {
-    let article: Article
+    private let article: Article
+    private let channel: Channel
+    
+    init(article: Article, persistenceProvider: PersistenceProvider) {
+        if let channelId = article.channelId {
+            self.article = article
+            self.channel = persistenceProvider.channels.getById(id: channelId)!
+        } else {
+            fatalError("channelId is nil")
+        }
+    }
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(article.title!)
-                .font(.headline)
-            Text(article.date!, style: .date)
+            VStack(alignment: .leading) {
+                Text(article.title!)
+                    .font(.headline)
+                Text(channel.title!)
+                Text(article.date!, style: .date)
+            }.padding(8)
+            Divider()
             BrowserView(url: getDataUrl()!)
         }.padding(8)
     }
