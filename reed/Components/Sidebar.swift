@@ -10,12 +10,11 @@ import SwiftUI
 
 struct Sidebar: View {
     
-    var persistenceProvider: PersistenceProvider
+    let persistenceProvider: PersistenceProvider
+    let allChannels: [Channel]
     
     @Binding var selectedChannel: Channel?
     @Binding var selectedArticle: Article?
-    
-    @State var allChannels: [Channel] = []
 
     var body: some View {
         List(selection: $selectedChannel) {
@@ -24,7 +23,7 @@ struct Sidebar: View {
                     NavigationLink(
                         destination: ChannelView(
                             articles: persistenceProvider.articles.getByChannelId(channelId: channel.id!),
-                            channel: channel, persistenceProvider: persistenceProvider,
+                            channel: channel,
                             selectedArticle: $selectedArticle)
                     ) {
                         Text(verbatim: channel.title!).font(.headline)
@@ -32,10 +31,5 @@ struct Sidebar: View {
                 }
             }
         }.listStyle(SidebarListStyle())
-        .onAppear(perform: getChannels)
-    }
-    
-    func getChannels() {
-        allChannels = persistenceProvider.channels.getAll()
     }
 }

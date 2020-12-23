@@ -12,14 +12,13 @@ import CoreData
 struct ChannelView: View {
     let articles: [Article]
     let channel: Channel
-    let persistenceProvider: PersistenceProvider
     @Binding var selectedArticle: Article?
 
     var body: some View {
         List(selection: $selectedArticle) {
             ForEach(articles) { article in
                 NavigationLink(
-                    destination: ArticleView(article: article, persistenceProvider: persistenceProvider),
+                    destination: ArticleView(article: article, channel: channel),
                     tag: article,
                     selection: $selectedArticle
                 ) {

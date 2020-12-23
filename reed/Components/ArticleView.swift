@@ -13,18 +13,9 @@ struct ArticleView: View {
     
     @AppStorage("fontSize") private var fontSize = 14.0
     
-    private let article: Article
-    private let channel: Channel?
-    
-    init(article: Article, persistenceProvider: PersistenceProvider) {
-        if let channelId = article.channelId {
-            self.article = article
-            self.channel = persistenceProvider.channels.getById(id: channelId)
-        } else {
-            fatalError("channelId is nil")
-        }
-    }
-    
+    let article: Article
+    let channel: Channel
+
     private func getSubtitleString(article: Article, channel: Channel) -> String {
         if let channelTitle = channel.title {
             if let author = article.author {
@@ -38,21 +29,19 @@ struct ArticleView: View {
     }
     
     var body: some View {
-        if let channelSave = channel {
+        VStack(alignment: .leading) {
             VStack(alignment: .leading) {
-                VStack(alignment: .leading) {
-                    Text(article.title!)
-                        .font(.headline)
-                        .lineLimit(2)
-                    Text(getSubtitleString(article: article, channel: channelSave))
-                        .font(.subheadline)
-                    if let date = article.date {
-                        Text(date, style: .date)
-                    }
-                }.padding(16)
-                Divider()
-                BrowserView(url: getDataUrl())
-            }
+                Text(article.title!)
+                    .font(.headline)
+                    .lineLimit(2)
+                Text(getSubtitleString(article: article, channel: channel))
+                    .font(.subheadline)
+                if let date = article.date {
+                    Text(date, style: .date)
+                }
+            }.padding(16)
+            Divider()
+            BrowserView(url: getDataUrl())
         }
     }
     

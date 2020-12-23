@@ -70,7 +70,7 @@ struct ReedApp: App {
         WindowGroup {
             NavigationView {
                 Sidebar (
-                    persistenceProvider: persistenceProvider,
+                    persistenceProvider: persistenceProvider, allChannels: allChannels,
                     selectedChannel: $selectedChannel,
                     selectedArticle: $selectedArticle
                 )
@@ -78,7 +78,7 @@ struct ReedApp: App {
                 if let channelId = selectedChannel?.id {
                     if let channel = persistenceProvider.channels.getById(id: channelId) {
                         if let articles = persistenceProvider.articles.getByChannelId(channelId: channel.id!) {
-                            ChannelView(articles: articles, channel: channel, persistenceProvider: persistenceProvider, selectedArticle: $selectedArticle)
+                            ChannelView(articles: articles, channel: channel, selectedArticle: $selectedArticle)
                         }
                         else {
                             Text("No articles...")
@@ -91,7 +91,7 @@ struct ReedApp: App {
                 }
                 
                 if let article = selectedArticle {
-                    ArticleView(article: article, persistenceProvider: persistenceProvider)
+                    ArticleView(article: article, channel: persistenceProvider.channels.getById(id: article.channelId!)!)
                 } else {
                     Text("Select article...")
                 }
