@@ -29,7 +29,7 @@ class ArticlePersistenceProvider {
         return res
     }
     
-    func getExistingOrNew(channelId: UUID, item: RSSFeedItem) -> NSManagedObject {
+    private func getExistingOrNew(channelId: UUID, item: RSSFeedItem) -> NSManagedObject {
         var a: NSManagedObject? = nil
         var id: UUID? = nil
         if let itemLink = item.link {
@@ -62,7 +62,7 @@ class ArticlePersistenceProvider {
         return a!
     }
     
-    func getContentString(item: RSSFeedItem) -> String {
+    private func getContentString(item: RSSFeedItem) -> String {
         if let content = item.content {
             if let encodedContent = content.contentEncoded {
                 return encodedContent
@@ -80,6 +80,24 @@ class ArticlePersistenceProvider {
         return "No content..."
     }
     
+    private func getMediaUri(item: RSSFeedItem) -> URL? {
+        if let safeUri = item.enclosure?.attributes?.url,
+           let safeType = item.enclosure?.attributes?.type,
+           safeType.hasPrefix("image/") {
+            return URL(string: safeUri)
+        } else {
+            print("No Media URIs found...")
+        }
+        return nil
+    }
+    
+    private func getLinkUri(item: RSSFeedItem) -> URL? {
+        if let safeLink = item.link {
+            return URL(string: safeLink)
+        }
+        return nil
+    }
+    
     func generate(channelId: UUID, item: RSSFeedItem) -> UUID? {
         if(item.title == nil) {
             print("Error: Item has no title!")
@@ -89,12 +107,13 @@ class ArticlePersistenceProvider {
             a.setValue(item.pubDate, forKey: "date")
             a.setValue(item.title ?? "No title", forKey: "title")
             a.setValue(item.description ?? item.title, forKey: "articleDescription")
-            a.setValue(item.link, forKey: "link")
+            a.setValue(getLinkUri(item: item), forKey: "link")
             a.setValue(item.guid?.value, forKey: "guid")
             a.setValue(getCategoryString(categories: item.categories), forKey: "categories")
             a.setValue(item.author, forKey: "author")
             a.setValue(getContentString(item: item), forKey: "content")
             a.setValue(channelId, forKey: "channelId")
+            a.setValue(getMediaUri(item: item), forKey: "mediaUri")
             
             let id = a.value(forKey: "id") as! UUID
             return id

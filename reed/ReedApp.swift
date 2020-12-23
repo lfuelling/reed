@@ -28,7 +28,7 @@ struct ReedApp: App {
         refreshing = true
         allChannels.forEach({channel in
             if(channel.updateUri != nil) {
-                if let feedUrl = URL(string: channel.updateUri!) {
+                if let feedUrl = channel.updateUri {
                     let parser = FeedParser(URL: feedUrl)
                     
                     // Parse asynchronously, not to block the UI.

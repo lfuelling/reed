@@ -64,17 +64,24 @@ class ChannelPersistenceProvider {
         return c!
     }
     
+    private func getLinkUri(channel: RSSFeed) -> URL? {
+        if let safeLink = channel.link {
+            return URL(string: safeLink)
+        }
+        return nil
+    }
+    
     func generate(feedURL: URL, imageId: UUID?, feed: RSSFeed) -> UUID? {
         let c = getExistingOrNew(feedUrl: feedURL, feed: feed)
         
         c.setValue(feed.title ?? feedURL.absoluteString, forKey: "title")
         c.setValue(feed.description, forKey: "channelDescription")
-        c.setValue(feed.link, forKey: "link")
+        c.setValue(getLinkUri(channel: feed), forKey: "link")
         c.setValue(imageId, forKey: "channelImageId")
         c.setValue(feed.generator, forKey: "generator")
         c.setValue(feed.lastBuildDate, forKey: "lastBuildDate")
         c.setValue(feed.ttl, forKey: "ttl")
-        c.setValue(feedURL.absoluteString, forKey: "updateUri")
+        c.setValue(feedURL, forKey: "updateUri")
         
         let id = c.value(forKey: "id") as! UUID
         return id

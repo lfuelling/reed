@@ -22,18 +22,18 @@ struct ChannelSettingsRow: View {
         } else {
             HStack {
                 Text(channel.title!).font(.headline)
-                Text(channel.updateUri!)
+                if let safeUri = channel.updateUri {
+                    Text(safeUri.absoluteString)
+                }
                 Spacer()
                 if let safeLink = channel.link {
-                    if let safeUrl = URL(string: safeLink) {
-                        Button(action: {
-                            if !NSWorkspace.shared.open(safeUrl) {
-                                print("Error opening link: '" + safeLink  + "'!")
-                            }
-                        }, label: {
-                            Image(systemName: "square.and.arrow.up")
-                        })
-                    }
+                    Button(action: {
+                        if !NSWorkspace.shared.open(safeLink) {
+                            print("Error opening link: '" + safeLink.absoluteString + "'!")
+                        }
+                    }, label: {
+                        Image(systemName: "square.and.arrow.up")
+                    })
                 }
                 Button(action: {
                     self.showingDeletionConfirmation = true

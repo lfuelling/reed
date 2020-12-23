@@ -9,8 +9,8 @@
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="guid" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="link" optional="YES" attributeType="String"/>
-        <attribute name="mediaUris" optional="YES" attributeType="String"/>
+        <attribute name="link" optional="YES" attributeType="URI"/>
+        <attribute name="mediaUri" optional="YES" attributeType="URI"/>
         <attribute name="title" optional="YES" attributeType="String"/>
     </entity>
     <entity name="Channel" representedClassName="Channel" syncable="YES" codeGenerationType="class">
@@ -19,10 +19,10 @@
         <attribute name="generator" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="lastBuildDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="link" optional="YES" attributeType="String"/>
+        <attribute name="link" optional="YES" attributeType="URI"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="ttl" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="updateUri" optional="YES" attributeType="String"/>
+        <attribute name="updateUri" optional="YES" attributeType="URI"/>
     </entity>
     <entity name="ChannelImage" representedClassName="ChannelImage" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>

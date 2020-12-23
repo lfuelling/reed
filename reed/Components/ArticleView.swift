@@ -24,7 +24,11 @@ struct ArticleView: View {
                 return channelTitle
             }
         } else {
-            return channel.updateUri!
+            if let safeLink = channel.link {
+                return safeLink.absoluteString
+            } else {
+                return channel.updateUri!.absoluteString
+            }
         }
     }
     

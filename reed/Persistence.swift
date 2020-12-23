@@ -47,11 +47,17 @@ struct PersistenceController {
             container.persistentStoreDescriptions.forEach({desc in
                 do {
                     try container.persistentStoreCoordinator.destroyPersistentStore(at: desc.url!, ofType: NSSQLiteStoreType)
+                    
                 } catch {
                     print(error)
                 }
             })
-            
+            // reload model
+            container.loadPersistentStores(completionHandler: {(storeDescription, error) in
+                if let e = error as NSError? {
+                    fatalError(e.localizedDescription)
+                }
+            })
         }
     }
 }

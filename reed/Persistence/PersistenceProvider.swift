@@ -40,12 +40,16 @@ class PersistenceProvider {
     }
     
     func save(callback: () -> Void) {
-        print("Saving data...")
-        do {
-            try ctx.save()
-            callback()
-        } catch {
-            print("Failed saving updated data!")
+        if ctx.hasChanges {
+            print("Saving data...")
+            do {
+                try ctx.save()
+                callback()
+            } catch {
+                print("Failed saving updated data!")
+            }
+        } else {
+            print("no changes...")
         }
     }
     
