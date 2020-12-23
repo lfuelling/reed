@@ -9,6 +9,13 @@ import Foundation
 import SwiftUI
 import WebKit
 
+extension String {
+    func replacingFirstOccurrence(of target: String, with replacement: String) -> String {
+        guard let range = self.range(of: target) else { return self }
+        return self.replacingCharacters(in: range, with: replacement)
+    }
+}
+
 struct ArticleView: View {
     
     @AppStorage("fontSize") private var fontSize = 14.0
@@ -77,7 +84,12 @@ html, body {
 }
 }
 """
-        let result = "<html><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width\"/><style type=\"text/css\">" + css + "</style></head><body>" + content + "</body></html>"
+        var articleImage = ""
+        if let safeImageUri = article.mediaUri {
+            let httpsUriString = safeImageUri.absoluteString.replacingFirstOccurrence(of: "http://", with: "https://")
+            articleImage += "<img style=\"margin-bottom: 8px;\" src=\"" + httpsUriString + "\" />"
+        }
+        let result = "<html><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width\"/><style type=\"text/css\">" + css + "</style></head><body>" + articleImage + content + "</body></html>"
         let utf8str = result.data(using: .utf8)
         return "data:text/html;base64," + (utf8str?.base64EncodedString(options: Data.Base64EncodingOptions(rawValue: 0)))!
     }
