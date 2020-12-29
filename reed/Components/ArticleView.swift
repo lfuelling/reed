@@ -22,6 +22,7 @@ struct ArticleView: View {
     
     let article: Article
     let channel: Channel
+    let persistenceProvider: PersistenceProvider
 
     private func getSubtitleString(article: Article, channel: Channel) -> String {
         if let channelTitle = channel.title {
@@ -56,7 +57,14 @@ struct ArticleView: View {
             }.padding(16)
             Divider()
             BrowserView(url: getDataUrl())
-        }
+        }.onAppear(perform: {
+            if !article.read {
+                article.read = true
+                persistenceProvider.save {
+                    print("Article marked as read...")
+                }
+            }
+        })
     }
     
     func getDataUrl() -> String {

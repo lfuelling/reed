@@ -26,6 +26,7 @@ struct ReedApp: App {
     
     func refetchAllFeeds() {
         refreshing = true
+        refreshChannels()
         allChannels.forEach({channel in
             if(channel.updateUri != nil) {
                 if let feedUrl = channel.updateUri {
@@ -77,12 +78,12 @@ struct ReedApp: App {
                 
                 if let channelId = selectedChannel?.id {
                     if let channel = persistenceProvider.channels.getById(id: channelId) {
-                        if let articles = persistenceProvider.articles.getByChannelId(channelId: channel.id!) {
-                            ChannelView(articles: articles, channel: channel, selectedArticle: $selectedArticle)
-                        }
-                        else {
-                            Text("No articles...")
-                        }
+                            ChannelView(
+                                channel: channel,
+                                persistenceProvider: persistenceProvider,
+                                selectedArticle: $selectedArticle,
+                                articles: persistenceProvider.articles.getByChannelId(channelId: channel.id!)
+                            )
                     } else {
                         Text("Channel not found...")
                     }
@@ -91,7 +92,11 @@ struct ReedApp: App {
                 }
                 
                 if let article = selectedArticle {
-                    ArticleView(article: article, channel: persistenceProvider.channels.getById(id: article.channelId!)!)
+                    ArticleView(
+                        article: article,
+                        channel: persistenceProvider.channels.getById(id: article.channelId!)!,
+                        persistenceProvider: persistenceProvider
+                    )
                 } else {
                     Text("Select article...")
                 }
@@ -99,7 +104,6 @@ struct ReedApp: App {
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
-                        refreshChannels()
                         refetchAllFeeds()
                     } label: {
                         if(refreshing) {

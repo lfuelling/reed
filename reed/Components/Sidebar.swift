@@ -22,9 +22,11 @@ struct Sidebar: View {
                 if(channel.title != nil) {
                     NavigationLink(
                         destination: ChannelView(
-                            articles: persistenceProvider.articles.getByChannelId(channelId: channel.id!),
                             channel: channel,
-                            selectedArticle: $selectedArticle)
+                            persistenceProvider: persistenceProvider,
+                            selectedArticle: $selectedArticle,
+                            articles: persistenceProvider.articles.getByChannelId(channelId: channel.id!)
+                        )
                     ) {
                         Text(verbatim: channel.title!).font(.headline)
                     }
