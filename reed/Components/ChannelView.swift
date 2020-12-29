@@ -25,9 +25,17 @@ struct ChannelView: View {
                     VStack(alignment: .leading) {
                         Text(article.title!)
                             .font(.headline)
-                            .lineLimit(3)
+                            .lineLimit(1)
+                        if let description = article.articleDescription {
+                            Text(description)
+                                .font(.subheadline)
+                                .lineLimit(2)
+                                .foregroundColor(.secondary)
+                        }
                         if let date = article.date {
                             Text(date, style: .date)
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
                         }
                     }
                 }
