@@ -41,14 +41,17 @@ struct ArticleView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text(article.title!)
                     .font(.headline)
                     .lineLimit(2)
                 Text(getSubtitleString(article: article, channel: channel))
                     .font(.subheadline)
+                    .foregroundColor(.secondary)
                 if let date = article.date {
                     Text(date, style: .date)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                 }
             }.padding(16)
             Divider()

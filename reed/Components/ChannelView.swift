@@ -9,11 +9,18 @@ import Foundation
 import SwiftUI
 import CoreData
 
+extension String {
+    func unhtml() -> String {
+        let str = self.replacingOccurrences(of: "<style>[^>]+</style>", with: "", options: .regularExpression, range: nil)
+        return str.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
+    }
+}
+
 struct ChannelView: View {
     let articles: [Article]
     let channel: Channel
     @Binding var selectedArticle: Article?
-
+    
     var body: some View {
         List(selection: $selectedArticle) {
             ForEach(articles) { article in
@@ -23,22 +30,27 @@ struct ChannelView: View {
                     selection: $selectedArticle
                 ) {
                     VStack(alignment: .leading) {
-                        Text(article.title!)
-                            .font(.headline)
-                            .lineLimit(1)
-                        if let description = article.articleDescription {
-                            Text(description)
-                                .font(.subheadline)
-                                .lineLimit(2)
-                                .foregroundColor(.secondary)
+                        HStack {
+                            Text(article.title!)
+                                .font(.headline)
+                                .lineLimit(1)
+                            if let date = article.date {
+                                Spacer()
+                                Text(date, style: .date)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
                         }
-                        if let date = article.date {
-                            Text(date, style: .date)
-                                .font(.subheadline)
+                        
+                        if let description = article.articleDescription {
+                            Text(description.unhtml())
+                                .font(.callout)
+                                .lineLimit(2)
                                 .foregroundColor(.secondary)
                         }
                     }
                 }
+                Divider()
             }
         }.navigationTitle(channel.title ?? "untitled")
         .navigationSubtitle(channel.channelDescription ?? "")
