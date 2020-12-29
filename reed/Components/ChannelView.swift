@@ -24,29 +24,36 @@ struct ChannelView: View {
     var body: some View {
         List(selection: $selectedArticle) {
             ForEach(articles) { article in
-                NavigationLink(
-                    destination: ArticleView(article: article, channel: channel),
-                    tag: article,
-                    selection: $selectedArticle
-                ) {
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text(article.title!)
-                                .font(.headline)
-                                .lineLimit(1)
-                            if let date = article.date {
-                                Spacer()
-                                Text(date, style: .date)
-                                    .font(.subheadline)
+                HStack(alignment: .top) {
+                    if !article.read {
+                        Image(systemName: "circle.fill")
+                            .foregroundColor(.accentColor)
+                            .font(.footnote)
+                    }
+                    NavigationLink(
+                        destination: ArticleView(article: article, channel: channel),
+                        tag: article,
+                        selection: $selectedArticle
+                    ) {
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Text(article.title!)
+                                    .font(.headline)
+                                    .lineLimit(1)
+                                if let date = article.date {
+                                    Spacer()
+                                    Text(date, style: .date)
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                            
+                            if let description = article.articleDescription {
+                                Text(description.unhtml())
+                                    .font(.callout)
+                                    .lineLimit(3)
                                     .foregroundColor(.secondary)
                             }
-                        }
-                        
-                        if let description = article.articleDescription {
-                            Text(description.unhtml())
-                                .font(.callout)
-                                .lineLimit(2)
-                                .foregroundColor(.secondary)
                         }
                     }
                 }
