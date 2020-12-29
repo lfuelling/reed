@@ -32,12 +32,13 @@ class ArticlePersistenceProvider {
     private func getExistingOrNew(channelId: UUID, item: RSSFeedItem) -> NSManagedObject {
         var a: NSManagedObject? = nil
         var id: UUID? = nil
+        
         if let itemLink = item.link {
             let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Article")
             request.predicate = NSPredicate(format: "link = %@ AND channelId = %@", itemLink, channelId.uuidString)
             request.returnsObjectsAsFaults = false
             do {
-                let result = try ctx.fetch(request) as! [NSManagedObject]
+                let result = try self.ctx.fetch(request) as! [NSManagedObject]
                 if result.count >= 1 {
                     a = result[0]
                     id = a?.value(forKey: "id") as? UUID
@@ -52,13 +53,15 @@ class ArticlePersistenceProvider {
         // TODO: detect duplicates and only update instead
         if(a == nil) {
             print("Creating new article...")
-            let articleEntity = NSEntityDescription.entity(forEntityName: "Article", in: ctx)
-            a = NSManagedObject(entity: articleEntity!, insertInto: ctx)
+            let articleEntity = NSEntityDescription.entity(forEntityName: "Article", in: self.ctx)
+            a = NSManagedObject(entity: articleEntity!, insertInto: self.ctx)
         }
         if(id == nil) {
             id = UUID()
             a!.setValue(id, forKey: "id")
         }
+        
+        
         return a!
     }
     
@@ -99,26 +102,33 @@ class ArticlePersistenceProvider {
     }
     
     func generate(channelId: UUID, item: RSSFeedItem) -> UUID? {
-        if(item.title == nil) {
-            print("Error: Item has no title!")
-        } else {
-            let a = getExistingOrNew(channelId: channelId, item: item)
-            
-            a.setValue(item.pubDate, forKey: "date")
-            a.setValue(item.title ?? "No title", forKey: "title")
-            a.setValue(item.description ?? item.title, forKey: "articleDescription")
-            a.setValue(getLinkUri(item: item), forKey: "link")
-            a.setValue(item.guid?.value, forKey: "guid")
-            a.setValue(getCategoryString(categories: item.categories), forKey: "categories")
-            a.setValue(item.author, forKey: "author")
-            a.setValue(getContentString(item: item), forKey: "content")
-            a.setValue(channelId, forKey: "channelId")
-            a.setValue(getMediaUri(item: item), forKey: "mediaUri")
-            
-            let id = a.value(forKey: "id") as! UUID
-            return id
+        let a = getExistingOrNew(channelId: channelId, item: item)
+        
+        let title = item.title ?? "No title"
+        let description = item.description ?? "No description"
+        
+        a.setValue(item.pubDate, forKey: "date")
+        a.setValue(title, forKey: "title")
+        a.setValue(description, forKey: "articleDescription")
+        a.setValue(getLinkUri(item: item), forKey: "link")
+        a.setValue(item.guid?.value, forKey: "guid")
+        a.setValue(getCategoryString(categories: item.categories), forKey: "categories")
+        a.setValue(item.author, forKey: "author")
+        a.setValue(getContentString(item: item), forKey: "content")
+        a.setValue(channelId, forKey: "channelId")
+        a.setValue(getMediaUri(item: item), forKey: "mediaUri")
+        
+        let id = a.value(forKey: "id") as! UUID
+        
+        self.ctx.perform {
+            do {
+                try self.ctx.save()
+            } catch {
+                print("Failed saving article '" + id.uuidString + "'!")
+            }
         }
-        return nil
+        
+        return id
     }
     
     func getByChannelId(channelId: UUID) -> [Article] {

@@ -15,9 +15,10 @@ class PersistenceProvider {
     let channels: ChannelPersistenceProvider
     
     init(ctx: NSManagedObjectContext) {
-        self.ctx = ctx
-        self.articles = ArticlePersistenceProvider(ctx: ctx)
-        self.channels = ChannelPersistenceProvider(ctx: ctx)
+        self.ctx = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        self.ctx.parent = ctx
+        self.articles = ArticlePersistenceProvider(ctx: self.ctx)
+        self.channels = ChannelPersistenceProvider(ctx: self.ctx)
     }
     
     func persistFeed(feed: RSSFeed, feedUrl: URL) {

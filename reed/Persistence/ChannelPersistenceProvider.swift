@@ -19,13 +19,15 @@ class ChannelPersistenceProvider {
     func generateImage(feed: RSSFeed) -> UUID? {
         // TODO: detect duplicates and only update instead
         if(feed.image != nil) {
-            let channelImageEntity = NSEntityDescription.entity(forEntityName: "ChannelImage", in: ctx)
-            let ci = NSManagedObject(entity: channelImageEntity!, insertInto: ctx)
             let id = UUID()
-            ci.setValue(id, forKey: "id")
-            ci.setValue(feed.image?.url, forKey: "url")
-            ci.setValue(feed.image?.title, forKey: "title")
-            ci.setValue(feed.image?.link, forKey: "link")
+            self.ctx.perform {
+                let channelImageEntity = NSEntityDescription.entity(forEntityName: "ChannelImage", in: self.ctx)
+                let ci = NSManagedObject(entity: channelImageEntity!, insertInto: self.ctx)
+                ci.setValue(id, forKey: "id")
+                ci.setValue(feed.image?.url, forKey: "url")
+                ci.setValue(feed.image?.title, forKey: "title")
+                ci.setValue(feed.image?.link, forKey: "link")
+            }
             return id
         }
         return nil
@@ -35,11 +37,12 @@ class ChannelPersistenceProvider {
         var c: NSManagedObject? = nil
         var id: UUID? = nil
         
+        
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Channel")
         request.predicate = NSPredicate(format: "updateUri = %@", feedUrl.absoluteString)
         request.returnsObjectsAsFaults = false
         do {
-            let result = try ctx.fetch(request) as! [NSManagedObject]
+            let result = try self.ctx.fetch(request) as! [NSManagedObject]
             if result.count >= 1 {
                 c = result[0]
                 id = c?.value(forKey: "id") as? UUID
@@ -50,17 +53,18 @@ class ChannelPersistenceProvider {
             print("Failed to find any existing channel with url '" + feedUrl.absoluteString + "'!")
         }
         
-        
         // TODO: detect duplicates and only update instead
         if(c == nil) {
             print("Creating new channel...")
-            let channelEntity = NSEntityDescription.entity(forEntityName: "Channel", in: ctx)
-            c = NSManagedObject(entity: channelEntity!, insertInto: ctx)
+            let channelEntity = NSEntityDescription.entity(forEntityName: "Channel", in: self.ctx)
+            c = NSManagedObject(entity: channelEntity!, insertInto: self.ctx)
         }
         if(id == nil) {
             id = UUID()
             c!.setValue(id, forKey: "id")
         }
+        
+        
         return c!
     }
     
@@ -84,6 +88,15 @@ class ChannelPersistenceProvider {
         c.setValue(feedURL, forKey: "updateUri")
         
         let id = c.value(forKey: "id") as! UUID
+        
+        self.ctx.perform {
+            do {
+                try self.ctx.save()
+            } catch {
+                print("Failed saving article '" + id.uuidString + "'!")
+            }
+        }
+        
         return id
     }
     
