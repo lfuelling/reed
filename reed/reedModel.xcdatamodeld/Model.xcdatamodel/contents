@@ -3,6 +3,7 @@
     <entity name="Article" representedClassName="Article" syncable="YES" codeGenerationType="class">
         <attribute name="articleDescription" optional="YES" attributeType="String"/>
         <attribute name="author" optional="YES" attributeType="String"/>
+        <attribute name="bookmarked" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="categories" optional="YES" attributeType="String"/>
         <attribute name="channelId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="content" optional="YES" attributeType="String"/>
@@ -11,6 +12,7 @@
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="link" optional="YES" attributeType="URI"/>
         <attribute name="mediaUri" optional="YES" attributeType="URI"/>
+        <attribute name="read" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="title" optional="YES" attributeType="String"/>
     </entity>
     <entity name="Channel" representedClassName="Channel" syncable="YES" codeGenerationType="class">
@@ -31,7 +33,7 @@
         <attribute name="url" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="Article" positionX="-45" positionY="90" width="128" height="194"/>
+        <element name="Article" positionX="-45" positionY="90" width="128" height="224"/>
         <element name="Channel" positionX="-54" positionY="18" width="128" height="164"/>
         <element name="ChannelImage" positionX="-63" positionY="-18" width="128" height="89"/>
     </elements>
