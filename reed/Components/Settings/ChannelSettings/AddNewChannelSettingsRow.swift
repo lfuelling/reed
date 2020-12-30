@@ -54,7 +54,6 @@ struct AddNewChannelSettingsRow: View {
                                     persistenceProvider.save(callback: {() -> Void in
                                         // Refresh UI
                                         retrieveChannels()
-                                        self.showingDialog = false
                                     })
                                 }
                                 
@@ -62,6 +61,8 @@ struct AddNewChannelSettingsRow: View {
                                 print(error)
                                 alertMessage = "Error parsing feed!"
                             }
+                            
+                            self.showingDialog = false
                         }
                         
                     } else {

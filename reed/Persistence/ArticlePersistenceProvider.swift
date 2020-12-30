@@ -120,14 +120,6 @@ class ArticlePersistenceProvider {
         
         let id = a.value(forKey: "id") as! UUID
         
-        self.ctx.perform {
-            do {
-                try self.ctx.save()
-            } catch {
-                print("Failed saving article '" + id.uuidString + "'!")
-            }
-        }
-        
         return id
     }
     

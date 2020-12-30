@@ -88,15 +88,6 @@ class ChannelPersistenceProvider {
         c.setValue(feedURL, forKey: "updateUri")
         
         let id = c.value(forKey: "id") as! UUID
-        
-        self.ctx.perform {
-            do {
-                try self.ctx.save()
-            } catch {
-                print("Failed saving article '" + id.uuidString + "'!")
-            }
-        }
-        
         return id
     }
     
