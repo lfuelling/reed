@@ -145,4 +145,31 @@ class ArticlePersistenceProvider {
         }
         return []
     }
+    
+    func markAsRead(article: Article, callback: @escaping () -> Void) {
+        if let articleId = article.id {
+            ctx.perform {
+                let fetchRequest: NSFetchRequest<Article> = Article.fetchRequest()
+                fetchRequest.predicate = NSPredicate(format: "id = %s", articleId.uuidString)
+                fetchRequest.returnsObjectsAsFaults = false
+                do {
+                    let results = try self.ctx.fetch(fetchRequest)
+                    if let a = results.first {
+                        a.read = true
+                    }
+                    try self.ctx.save()
+                    print("Article marked as read...")
+                } catch let error as NSError {
+                    print(error.localizedDescription)
+                }
+                DispatchQueue.main.async {
+                    callback()
+                }
+            }
+        } else {
+            print("Error: articleId is nil!")
+            callback()
+        }
+        
+    }
 }

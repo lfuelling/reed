@@ -17,11 +17,19 @@ struct ReedApp: App {
     
     @State private var selectedChannel: Channel? = nil
     @State private var selectedArticle: Article? = nil
+    
     @State private var allChannels: [Channel] = []
+    @State private var articlesForChannel: [Article] = []
+    
     @State private var refreshing: Bool = false
     
     func refreshChannels() -> Void {
+        print("Refreshing...")
         allChannels = persistenceProvider.channels.getAll()
+        
+        if let channelId = selectedChannel?.id {
+            articlesForChannel = persistenceProvider.articles.getByChannelId(channelId: channelId)
+        }
     }
     
     func refetchAllFeeds() {
@@ -71,7 +79,9 @@ struct ReedApp: App {
         WindowGroup {
             NavigationView {
                 Sidebar (
-                    persistenceProvider: persistenceProvider, allChannels: allChannels,
+                    persistenceProvider: persistenceProvider,
+                    allChannels: allChannels,
+                    refreshData: refreshChannels,
                     selectedChannel: $selectedChannel,
                     selectedArticle: $selectedArticle
                 )
@@ -81,8 +91,9 @@ struct ReedApp: App {
                             ChannelView(
                                 channel: channel,
                                 persistenceProvider: persistenceProvider,
+                                refreshData: refreshChannels,
                                 selectedArticle: $selectedArticle,
-                                articles: persistenceProvider.articles.getByChannelId(channelId: channel.id!)
+                                articles: articlesForChannel
                             )
                     } else {
                         Text("Channel not found...")
@@ -95,7 +106,8 @@ struct ReedApp: App {
                     ArticleView(
                         article: article,
                         channel: persistenceProvider.channels.getById(id: article.channelId!)!,
-                        persistenceProvider: persistenceProvider
+                        persistenceProvider: persistenceProvider,
+                        refreshData: refreshChannels
                     )
                 } else {
                     Text("Select article...")

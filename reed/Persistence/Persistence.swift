@@ -6,8 +6,12 @@
 //
 
 import CoreData
+import SwiftUI
 
 struct PersistenceController {
+    
+    @AppStorage("resetData") private var resetData = false
+    
     static let shared = PersistenceController()
     
     static var preview: PersistenceController = {
@@ -35,7 +39,7 @@ struct PersistenceController {
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
         }
-        var shouldResetModel: Bool = false
+        var shouldResetModel: Bool = resetData
         container.loadPersistentStores(completionHandler: {(storeDescription, error) in
             if let _ = error as NSError? {
                 print("Error loading data, probably a corrupt model!")

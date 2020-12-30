@@ -12,6 +12,7 @@ struct Sidebar: View {
     
     let persistenceProvider: PersistenceProvider
     let allChannels: [Channel]
+    let refreshData: () -> Void
     
     @Binding var selectedChannel: Channel?
     @Binding var selectedArticle: Article?
@@ -24,6 +25,7 @@ struct Sidebar: View {
                         destination: ChannelView(
                             channel: channel,
                             persistenceProvider: persistenceProvider,
+                            refreshData: refreshData,
                             selectedArticle: $selectedArticle,
                             articles: persistenceProvider.articles.getByChannelId(channelId: channel.id!)
                         )

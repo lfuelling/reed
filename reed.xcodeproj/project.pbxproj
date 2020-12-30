@@ -123,6 +123,7 @@
 				CAE9AB99259182E800344689 /* ArticlePersistenceProvider.swift */,
 				CAE9AB93259165F200344689 /* ChannelPersistenceProvider.swift */,
 				CAE9ABA72591844100344689 /* PersistenceProvider.swift */,
+				CAFAC8F3259123320094B699 /* Persistence.swift */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -159,7 +160,6 @@
 				CAFAC8182590FAF90094B699 /* Preview Content */,
 				CAFAC84B2590FDD50094B699 /* DummyStores.swift */,
 				CAFAC8A1259121040094B699 /* reedModel.xcdatamodeld */,
-				CAFAC8F3259123320094B699 /* Persistence.swift */,
 				CA1EC7152592B11A00AF241E /* Credits.rtf */,
 			);
 			path = reed;

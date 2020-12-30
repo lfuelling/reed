@@ -23,7 +23,8 @@ struct ArticleView: View {
     let article: Article
     let channel: Channel
     let persistenceProvider: PersistenceProvider
-
+    let refreshData: () -> Void
+    
     private func getSubtitleString(article: Article, channel: Channel) -> String {
         if let channelTitle = channel.title {
             if let author = article.author {
@@ -59,10 +60,9 @@ struct ArticleView: View {
             BrowserView(url: getDataUrl())
         }.onAppear(perform: {
             if !article.read {
-                article.read = true
-                persistenceProvider.save {
-                    print("Article marked as read...")
-                }
+                persistenceProvider.articles.markAsRead(article: article, callback: {
+                    refreshData()
+                })
             }
         })
     }

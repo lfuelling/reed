@@ -51,6 +51,7 @@ class PersistenceProvider {
             }
         } else {
             print("no changes...")
+            callback()
         }
     }
     
@@ -66,6 +67,22 @@ class PersistenceProvider {
             try ctx.save()
         } catch {
             print("Failed saving context after deleting channel '" + channel.id!.uuidString + "'!")
+        }
+    }
+    
+    func resetDatabase() {
+        do {
+            try ctx.persistentStoreCoordinator?.managedObjectModel.entities.forEach { (entity) in
+                if let name = entity.name {
+                    let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: name)
+                    let request = NSBatchDeleteRequest(fetchRequest: fetch)
+                    try ctx.execute(request)
+                }
+            }
+
+            try self.ctx.save()
+        } catch {
+            print("Error resetting the database: \(error.localizedDescription)")
         }
     }
 }

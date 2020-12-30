@@ -29,7 +29,7 @@ struct SettingsView: View {
                     Label("Channels", systemImage: "newspaper")
                 }
                 .tag(Tabs.channels)
-            AdvancedSettingsView()
+            AdvancedSettingsView(persistenceProvider: persistenceProvider)
                 .tabItem {
                     Label("Advanced", systemImage: "slider.horizontal.3")
                 }
