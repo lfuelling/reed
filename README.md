@@ -2,7 +2,7 @@
 
 A simple feed reader for macOS.
 
-![Screenshot of the application with an example feed opened.](screenshot.png)
+![Screenshot of the application with an example feed opened.](./screenshot.png)
 
 ## Usage
 
