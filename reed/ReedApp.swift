@@ -69,11 +69,11 @@ struct ReedApp: App {
                 if let channelId = selectedChannel?.id {
                     if let channel = persistenceProvider.channels.getById(id: channelId) {
                             ChannelView(
-                                channel: channel,
                                 persistenceProvider: persistenceProvider,
                                 refreshData: refreshChannels,
                                 selectedArticle: $selectedArticle,
-                                articles: articlesForChannel
+                                articles: articlesForChannel,
+                                channel: channel
                             )
                     } else {
                         Text("Channel not found...")

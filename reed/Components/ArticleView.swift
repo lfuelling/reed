@@ -20,8 +20,9 @@ struct ArticleView: View {
     
     @AppStorage("fontSize") private var fontSize = 14.0
     
-    let article: Article
-    let channel: Channel
+    @State var article: Article
+    @State var channel: Channel
+
     let persistenceProvider: PersistenceProvider
     let refreshData: () -> Void
     
@@ -43,17 +44,37 @@ struct ArticleView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(article.title!)
-                    .font(.headline)
-                    .lineLimit(2)
-                Text(getSubtitleString(article: article, channel: channel))
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                if let date = article.date {
-                    Text(date, style: .date)
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Text(article.title!)
+                            .font(.headline)
+                            .lineLimit(2)
+                        Button {
+                            article.bookmarked = !article.bookmarked
+                            persistenceProvider.save {
+                                print("Updated article...")
+                            }
+                        } label: {
+                            if(article.bookmarked) {
+                                Image(systemName: "star.fill")
+                            } else {
+                                Image(systemName: "star")
+                            }
+                        }.buttonStyle(PlainButtonStyle())
+                    }
+                    Text(getSubtitleString(article: article, channel: channel))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
+                    if let date = article.date {
+                        Text(date, style: .date)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                Spacer()
+                VStack {
+                    
                 }
             }.padding(16)
             Divider()

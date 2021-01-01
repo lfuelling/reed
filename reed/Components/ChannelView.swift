@@ -17,26 +17,34 @@ extension String {
 }
 
 struct ChannelView: View {
-    let channel: Channel
     let persistenceProvider: PersistenceProvider
     let refreshData: () -> Void
+    
     @Binding var selectedArticle: Article?
     @State var articles: [Article]
+    @State var channel: Channel
     
     var body: some View {
         if articles.count > 0 {
             List(selection: $selectedArticle) {
                 ForEach(articles) { article in
                     HStack(alignment: .top) {
+                        
                         if !article.read {
                             Image(systemName: "circle.fill")
                                 .foregroundColor(.accentColor)
                                 .font(.footnote)
                         } else {
-                            Image(systemName: "circle.fill")
-                                .foregroundColor(.accentColor)
-                                .font(.footnote)
-                                .opacity(0.0)
+                            if article.bookmarked {
+                                Image(systemName: "star.fill")
+                                    .foregroundColor(.yellow)
+                                    .font(.footnote)
+                            } else {
+                                Image(systemName: "circle.fill")
+                                    .foregroundColor(.accentColor)
+                                    .font(.footnote)
+                                    .opacity(0.0)
+                            }
                         }
                         NavigationLink(
                             destination: ArticleView(article: article, channel: channel, persistenceProvider: persistenceProvider, refreshData: refreshData),
