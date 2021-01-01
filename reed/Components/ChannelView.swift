@@ -24,6 +24,8 @@ struct ChannelView: View {
     
     @Binding var selectedArticle: Article?
     
+    @AppStorage("descriptionMaxLines") private var descriptionMaxLines = 3.0
+    
     var body: some View {
         if articles.count > 0 {
             List(selection: $selectedArticle) {
@@ -67,7 +69,7 @@ struct ChannelView: View {
                                 if let description = article.articleDescription {
                                     Text(description.unhtml())
                                         .font(.callout)
-                                        .lineLimit(3)
+                                        .lineLimit(Int(descriptionMaxLines))
                                         .foregroundColor(.secondary)
                                 }
                             }
