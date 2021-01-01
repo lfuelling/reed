@@ -43,11 +43,11 @@ struct PersistenceController {
         container.loadPersistentStores(completionHandler: {(storeDescription, error) in
             if let _ = error as NSError? {
                 print("Error loading data, probably a corrupt model!")
-                print("Resetting model...")
                 shouldResetModel = true
             }
         })
         if(shouldResetModel) {
+            print("Resetting data...")
             container.persistentStoreDescriptions.forEach({desc in
                 do {
                     try container.persistentStoreCoordinator.destroyPersistentStore(at: desc.url!, ofType: NSSQLiteStoreType)
@@ -62,6 +62,9 @@ struct PersistenceController {
                     fatalError(e.localizedDescription)
                 }
             })
+            if resetData {
+                resetData = false
+            }
         }
     }
 }

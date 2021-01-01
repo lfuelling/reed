@@ -15,8 +15,7 @@ class PersistenceProvider {
     let channels: ChannelPersistenceProvider
     
     init(ctx: NSManagedObjectContext) {
-        self.ctx = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        self.ctx.parent = ctx
+        self.ctx = ctx
         self.articles = ArticlePersistenceProvider(ctx: self.ctx)
         self.channels = ChannelPersistenceProvider(ctx: self.ctx)
     }

@@ -37,7 +37,6 @@ class ChannelPersistenceProvider {
         var c: NSManagedObject? = nil
         var id: UUID? = nil
         
-        
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Channel")
         request.predicate = NSPredicate(format: "updateUri = %@", feedUrl.absoluteString)
         request.returnsObjectsAsFaults = false
@@ -64,7 +63,6 @@ class ChannelPersistenceProvider {
             c!.setValue(id, forKey: "id")
         }
         
-        
         return c!
     }
     
@@ -88,6 +86,13 @@ class ChannelPersistenceProvider {
         c.setValue(feedURL, forKey: "updateUri")
         
         let id = c.value(forKey: "id") as! UUID
+        if ctx.hasChanges {
+            do {
+                try ctx.save()
+            } catch {
+                print("Error saving!")
+            }
+        }
         return id
     }
     

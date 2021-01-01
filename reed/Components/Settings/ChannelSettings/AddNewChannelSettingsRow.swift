@@ -31,40 +31,10 @@ struct AddNewChannelSettingsRow: View {
                     
                     
                     if let feedUrl = inputUrl {
-                        let parser = FeedParser(URL: feedUrl)
-                        
-                        // Parse asynchronously, not to block the UI.
-                        parser.parseAsync(queue: DispatchQueue.global(qos: .userInitiated)) {(result) in
-                            
-                            switch result {
-                            case .success(let feed):
-                                switch feed {
-                                case .rss(let feed):
-                                    persistenceProvider.persistFeed(feed: feed, feedUrl: feedUrl)
-                                    
-                                    newChannelUrl = ""
-                                    break
-                                default:
-                                    alertMessage = "Currently only RSS is supported!"
-                                    break
-                                }
-                                
-                                
-                                DispatchQueue.main.async {
-                                    persistenceProvider.save(callback: {() -> Void in
-                                        // Refresh UI
-                                        retrieveChannels()
-                                    })
-                                }
-                                
-                            case .failure(let error):
-                                print(error)
-                                alertMessage = "Error parsing feed!"
-                            }
-                            
-                            self.showingDialog = false
-                        }
-                        
+                        FeedUtils(persistenceProvider: persistenceProvider).fetchAndPersistFeed(feedUrl: feedUrl, callback: {
+                            newChannelUrl = ""
+                            retrieveChannels()
+                        })
                     } else {
                         // TODO: show error
                     }

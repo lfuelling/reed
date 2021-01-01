@@ -60,9 +60,10 @@ struct ArticleView: View {
             BrowserView(url: getDataUrl())
         }.onAppear(perform: {
             if !article.read {
-                persistenceProvider.articles.markAsRead(article: article, callback: {
-                    refreshData()
-                })
+                article.read = true
+                persistenceProvider.save {
+                    print("Updated article...")
+                }
             }
         })
     }

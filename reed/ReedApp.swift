@@ -24,55 +24,35 @@ struct ReedApp: App {
     @State private var refreshing: Bool = false
     
     func refreshChannels() -> Void {
-        print("Refreshing...")
-        allChannels = persistenceProvider.channels.getAll()
-        
-        if let channelId = selectedChannel?.id {
-            articlesForChannel = persistenceProvider.articles.getByChannelId(channelId: channelId)
+        if !refreshing {
+            print("Reloading channels...")
+            allChannels = persistenceProvider.channels.getAll()
+            
+            if let channelId = selectedChannel?.id {
+                selectedChannel = persistenceProvider.channels.getById(id: channelId)
+                articlesForChannel = persistenceProvider.articles.getByChannelId(channelId: channelId)
+            }
         }
     }
     
     func refetchAllFeeds() {
-        refreshing = true
-        refreshChannels()
-        allChannels.forEach({channel in
-            if(channel.updateUri != nil) {
+        if(!refreshing && allChannels.count > 0) {
+            print("Refreshing " + String(allChannels.count) + " channels...")
+            self.refreshing = true
+            allChannels.forEach({channel in
                 if let feedUrl = channel.updateUri {
-                    let parser = FeedParser(URL: feedUrl)
-                    
-                    // Parse asynchronously, not to block the UI.
-                    parser.parseAsync(queue: DispatchQueue.global(qos: .userInitiated)) {(result) in
-                        
-                        switch result {
-                        case .success(let feed):
-                            switch feed {
-                            case .rss(let feed):
-                                persistenceProvider.persistFeed(feed: feed, feedUrl: feedUrl)
-                                break
-                            default:
-                                print("Currently only RSS is supported!")
-                                break
-                            }
-                            
-                            DispatchQueue.main.async {
-                                persistenceProvider.save(callback: {() -> Void in
-                                    // Refresh UI
-                                    refreshChannels()
-                                    refreshing = false
-                                })
-                            }
-                            
-                        case .failure(let error):
-                            print("Error parsing feed!")
-                            print(error)
-                        }
-                    }
-                    
-                } else {
-                    // TODO: show error
+                    FeedUtils(persistenceProvider: persistenceProvider).fetchAndPersistFeed(feedUrl: feedUrl, callback: {
+                        self.refreshing = false
+                        self.refreshChannels()
+                    })
                 }
-            }
-        })
+            })
+        }
+    }
+    
+    init () {
+        refreshChannels()
+        refetchAllFeeds()
     }
     
     var body: some Scene {
@@ -116,6 +96,7 @@ struct ReedApp: App {
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
+                        refreshChannels()
                         refetchAllFeeds()
                     } label: {
                         if(refreshing) {
