@@ -13,6 +13,8 @@ import FeedKit
 @main
 struct ReedApp: App {
     
+    @AppStorage("showBookmarksOnly") private var showBookmarksOnly = false
+    
     let persistenceProvider = PersistenceProvider(ctx: PersistenceController.shared.container.viewContext)
     
     @State private var selectedChannel: Channel? = nil
@@ -30,7 +32,13 @@ struct ReedApp: App {
             
             if let channelId = selectedChannel?.id {
                 selectedChannel = persistenceProvider.channels.getById(id: channelId)
-                articlesForChannel = persistenceProvider.articles.getByChannelId(channelId: channelId)
+                
+                if showBookmarksOnly {
+                    articlesForChannel = persistenceProvider.articles.getByChannelId(channelId: channelId)
+                        .filter({ (a) -> Bool in return a.bookmarked })
+                } else {
+                    articlesForChannel = persistenceProvider.articles.getByChannelId(channelId: channelId)
+                }
             }
         }
     }
@@ -60,21 +68,21 @@ struct ReedApp: App {
             NavigationView {
                 Sidebar (
                     persistenceProvider: persistenceProvider,
-                    allChannels: allChannels,
                     refreshData: refreshChannels,
+                    allChannels: allChannels,
                     selectedChannel: $selectedChannel,
                     selectedArticle: $selectedArticle
                 )
                 
                 if let channelId = selectedChannel?.id {
                     if let channel = persistenceProvider.channels.getById(id: channelId) {
-                            ChannelView(
-                                persistenceProvider: persistenceProvider,
-                                refreshData: refreshChannels,
-                                selectedArticle: $selectedArticle,
-                                articles: articlesForChannel,
-                                channel: channel
-                            )
+                        ChannelView(
+                            articles: articlesForChannel,
+                            channel: channel,
+                            persistenceProvider: persistenceProvider,
+                            refreshData: refreshChannels,
+                            selectedArticle: $selectedArticle
+                        )
                     } else {
                         Text("Channel not found...")
                     }
@@ -95,16 +103,28 @@ struct ReedApp: App {
             }.navigationTitle(selectedChannel?.title ?? "reed")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        refreshChannels()
-                        refetchAllFeeds()
-                    } label: {
-                        if(refreshing) {
-                            Image(systemName: "hourglass")
-                        } else {
-                            Image(systemName: "arrow.triangle.2.circlepath")
+                    HStack {
+                        Button {
+                            showBookmarksOnly = !showBookmarksOnly
+                            refreshChannels()
+                        } label: {
+                            if(showBookmarksOnly) {
+                                Image(systemName: "star.fill")
+                            } else {
+                                Image(systemName: "star")
+                            }
                         }
-                    }.disabled(refreshing)
+                        Button {
+                            refreshChannels()
+                            refetchAllFeeds()
+                        } label: {
+                            if(refreshing) {
+                                Image(systemName: "hourglass")
+                            } else {
+                                Image(systemName: "arrow.triangle.2.circlepath")
+                            }
+                        }.disabled(refreshing)
+                    }
                 }
             }
             .onAppear(perform: refreshChannels)

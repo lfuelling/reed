@@ -17,12 +17,12 @@ extension String {
 }
 
 struct ChannelView: View {
+    let articles: [Article]
+    let channel: Channel
     let persistenceProvider: PersistenceProvider
     let refreshData: () -> Void
     
     @Binding var selectedArticle: Article?
-    @State var articles: [Article]
-    @State var channel: Channel
     
     var body: some View {
         if articles.count > 0 {
