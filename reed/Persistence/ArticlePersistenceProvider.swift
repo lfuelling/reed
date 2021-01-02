@@ -12,6 +12,7 @@ import SwiftUI
 
 class ArticlePersistenceProvider {
     @AppStorage("sortDescending") private var sortDescending = true
+    @AppStorage("showBookmarksOnly") private var showBookmarksOnly = false
     
     private let ctx: NSManagedObjectContext
     
@@ -138,11 +139,30 @@ class ArticlePersistenceProvider {
         request.returnsObjectsAsFaults = false
         do {
             let result = try ctx.fetch(request)
-            return result as! [Article]
+            let castArray = result as! [Article]
+            
+            if showBookmarksOnly {
+                return castArray.filter({ (a) -> Bool in return a.bookmarked })
+            } else {
+                return castArray
+            }
             
         } catch {
             print("Failed to find articles for channel with id '" + channelId.uuidString + "'")
         }
         return []
+    }
+    
+    func getById(id: UUID) -> Article? {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Article")
+        request.predicate = NSPredicate(format: "id = %@", id.uuidString)
+        request.returnsObjectsAsFaults = false
+        do {
+            let result = try ctx.fetch(request)
+            return result[0] as? Article
+        } catch {
+            print("Failed to find article with id '" + id.uuidString + "'")
+        }
+        return nil
     }
 }

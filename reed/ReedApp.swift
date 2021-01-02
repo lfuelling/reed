@@ -15,39 +15,36 @@ struct ReedApp: App {
     
     @AppStorage("showBookmarksOnly") private var showBookmarksOnly = false
     
-    let persistenceProvider = PersistenceProvider(ctx: PersistenceController.shared.container.viewContext)
-    
-    @State private var selectedChannel: Channel? = nil
-    @State private var selectedArticle: Article? = nil
-    
-    @State private var allChannels: [Channel] = []
-    @State private var articlesForChannel: [Article] = []
+    let persistenceProvider: PersistenceProvider
     
     @State private var refreshing: Bool = false
+    
+    @State @ObservedObject var appState: AppState
+    
+    init () {
+        self.persistenceProvider = PersistenceProvider(ctx: PersistenceController.shared.container.viewContext)
+        self.appState = AppState(persistenceProvider: self.persistenceProvider)
+
+        refreshChannels()
+        refetchAllFeeds()
+    }
     
     func refreshChannels() -> Void {
         if !refreshing {
             print("Reloading channels...")
-            allChannels = persistenceProvider.channels.getAll()
+            appState.allChannels = persistenceProvider.channels.getAll()
             
-            if let channelId = selectedChannel?.id {
-                selectedChannel = persistenceProvider.channels.getById(id: channelId)
-                
-                if showBookmarksOnly {
-                    articlesForChannel = persistenceProvider.articles.getByChannelId(channelId: channelId)
-                        .filter({ (a) -> Bool in return a.bookmarked })
-                } else {
-                    articlesForChannel = persistenceProvider.articles.getByChannelId(channelId: channelId)
-                }
+            if let channelId = appState.selectedChannel?.id {
+                appState.selectedChannel = persistenceProvider.channels.getById(id: channelId)
             }
         }
     }
     
     func refetchAllFeeds() {
-        if(!refreshing && allChannels.count > 0) {
-            print("Refreshing " + String(allChannels.count) + " channels...")
+        if(!refreshing && appState.allChannels.count > 0) {
+            print("Refreshing " + String(appState.allChannels.count) + " channels...")
             self.refreshing = true
-            allChannels.forEach({channel in
+            appState.allChannels.forEach({channel in
                 if let feedUrl = channel.updateUri {
                     FeedUtils(persistenceProvider: persistenceProvider).fetchAndPersistFeed(feedUrl: feedUrl, callback: {
                         self.refreshing = false
@@ -58,30 +55,27 @@ struct ReedApp: App {
         }
     }
     
-    init () {
-        refreshChannels()
-        refetchAllFeeds()
-    }
-    
     var body: some Scene {
         WindowGroup {
             NavigationView {
+                
                 Sidebar (
                     persistenceProvider: persistenceProvider,
                     refreshData: refreshChannels,
-                    allChannels: allChannels,
-                    selectedChannel: $selectedChannel,
-                    selectedArticle: $selectedArticle
+                    allChannels: appState.allChannels,
+                    articlesForChannel: appState.articlesForChannel,
+                    selectedChannel: appState.$selectedChannel,
+                    selectedArticle: appState.$selectedArticle
                 )
                 
-                if let channelId = selectedChannel?.id {
+                if let channelId = appState.selectedChannel?.id {
                     if let channel = persistenceProvider.channels.getById(id: channelId) {
                         ChannelView(
-                            articles: articlesForChannel,
+                            articles: appState.articlesForChannel,
                             channel: channel,
                             persistenceProvider: persistenceProvider,
                             refreshData: refreshChannels,
-                            selectedArticle: $selectedArticle
+                            selectedArticle: appState.$selectedArticle
                         )
                     } else {
                         Text("Channel not found...")
@@ -90,17 +84,19 @@ struct ReedApp: App {
                     Text("Select channel...")
                 }
                 
-                if let article = selectedArticle {
-                    ArticleView(
-                        article: article,
-                        channel: persistenceProvider.channels.getById(id: article.channelId!)!,
-                        persistenceProvider: persistenceProvider,
-                        refreshData: refreshChannels
-                    )
+                if let articleId = appState.selectedArticle?.id {
+                    if let article = persistenceProvider.articles.getById(id: articleId) {
+                        ArticleView(
+                            article: article,
+                            channel: persistenceProvider.channels.getById(id: article.channelId!)!,
+                            persistenceProvider: persistenceProvider,
+                            refreshData: refreshChannels
+                        )
+                    }
                 } else {
                     Text("Select article...")
                 }
-            }.navigationTitle(selectedChannel?.title ?? "reed")
+            }.navigationTitle(appState.selectedChannel?.title ?? "reed")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     HStack {

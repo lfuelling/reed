@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		CA1EC7162592B11A00AF241E /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = CA1EC7152592B11A00AF241E /* Credits.rtf */; };
 		CA426426259F983E007ACDB0 /* FeedUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA426425259F983E007ACDB0 /* FeedUtils.swift */; };
+		CA85DFDC259FF33500888457 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA85DFDB259FF33500888457 /* AppState.swift */; };
 		CAE9AB7A25913AE900344689 /* ChannelSettingsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE9AB7925913AE900344689 /* ChannelSettingsRow.swift */; };
 		CAE9AB802591434500344689 /* AddNewChannelSettingsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE9AB7F2591434500344689 /* AddNewChannelSettingsRow.swift */; };
 		CAE9AB8C2591488D00344689 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = CAE9AB8B2591488D00344689 /* FeedKit */; };
@@ -53,6 +54,7 @@
 /* Begin PBXFileReference section */
 		CA1EC7152592B11A00AF241E /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		CA426425259F983E007ACDB0 /* FeedUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUtils.swift; sourceTree = "<group>"; };
+		CA85DFDB259FF33500888457 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		CAE9AB7925913AE900344689 /* ChannelSettingsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSettingsRow.swift; sourceTree = "<group>"; };
 		CAE9AB7F2591434500344689 /* AddNewChannelSettingsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewChannelSettingsRow.swift; sourceTree = "<group>"; };
 		CAE9AB93259165F200344689 /* ChannelPersistenceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelPersistenceProvider.swift; sourceTree = "<group>"; };
@@ -109,6 +111,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CA85DFDA259FF32700888457 /* State */ = {
+			isa = PBXGroup;
+			children = (
+				CA85DFDB259FF33500888457 /* AppState.swift */,
+			);
+			path = State;
+			sourceTree = "<group>";
+		};
 		CAE9AB7E2591433400344689 /* ChannelSettings */ = {
 			isa = PBXGroup;
 			children = (
@@ -153,6 +163,7 @@
 		CAFAC8112590FAF80094B699 /* reed */ = {
 			isa = PBXGroup;
 			children = (
+				CA85DFDA259FF32700888457 /* State */,
 				CAE9AB98259182B900344689 /* Persistence */,
 				CAFAC855259101CA0094B699 /* Components */,
 				CAFAC8122590FAF80094B699 /* ReedApp.swift */,
@@ -356,6 +367,7 @@
 			files = (
 				CAFAC8A3259121040094B699 /* reedModel.xcdatamodeld in Sources */,
 				CAE9AB7A25913AE900344689 /* ChannelSettingsRow.swift in Sources */,
+				CA85DFDC259FF33500888457 /* AppState.swift in Sources */,
 				CAFAC8132590FAF80094B699 /* ReedApp.swift in Sources */,
 				CAFAC88425910E1B0094B699 /* SettingsView.swift in Sources */,
 				CAE9ABA82591844100344689 /* PersistenceProvider.swift in Sources */,
