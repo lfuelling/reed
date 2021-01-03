@@ -146,6 +146,18 @@ struct ReedApp: App {
                 getArticleView(updater: updater)
             }.navigationTitle(selectedChannel?.title ?? "reed")
             .toolbar {
+                
+                ToolbarItem(placement: .primaryAction) {
+                    if let safeArticle = selectedArticle {
+                        if let safeLink = safeArticle.link {
+                            Button {
+                                NSWorkspace.shared.open(safeLink)
+                            } label: {
+                                Image(systemName: "globe")
+                            }.disabled(refreshing)
+                        }
+                    }
+                }
                 ToolbarItem(placement: .primaryAction) {
                     Button {
                         showBookmarksOnly = !showBookmarksOnly
