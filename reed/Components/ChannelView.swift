@@ -17,8 +17,8 @@ extension String {
 }
 
 struct ChannelView: View {
-    let articles: [Article]
-    let channel: Channel
+    @State var articles: [Article]
+    @State var channel: Channel
     let persistenceProvider: PersistenceProvider
     let refreshData: () -> Void
     
@@ -28,55 +28,52 @@ struct ChannelView: View {
     
     var body: some View {
         if articles.count > 0 {
-            List(selection: $selectedArticle) {
-                ForEach(articles) { article in
-                    HStack(alignment: .top) {
-                        
-                        if !article.read {
+            List(articles, id: \.self.id, selection: $selectedArticle) { article in
+                HStack(alignment: .top) {
+                    if !article.read {
+                        Image(systemName: "circle.fill")
+                            .foregroundColor(.accentColor)
+                            .font(.footnote)
+                    } else {
+                        if article.bookmarked {
+                            Image(systemName: "star.fill")
+                                .foregroundColor(.yellow)
+                                .font(.footnote)
+                        } else {
                             Image(systemName: "circle.fill")
                                 .foregroundColor(.accentColor)
                                 .font(.footnote)
-                        } else {
-                            if article.bookmarked {
-                                Image(systemName: "star.fill")
-                                    .foregroundColor(.yellow)
-                                    .font(.footnote)
-                            } else {
-                                Image(systemName: "circle.fill")
-                                    .foregroundColor(.accentColor)
-                                    .font(.footnote)
-                                    .opacity(0.0)
-                            }
+                                .opacity(0.0)
                         }
-                        NavigationLink(
-                            destination: ArticleView(article: article, channel: channel, persistenceProvider: persistenceProvider, refreshData: refreshData),
-                            tag: article,
-                            selection: $selectedArticle
-                        ) {
-                            VStack(alignment: .leading) {
-                                HStack {
-                                    Text(article.title!)
-                                        .font(.headline)
-                                        .lineLimit(1)
-                                    if let date = article.date {
-                                        Spacer()
-                                        Text(date, style: .date)
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
-                                    }
-                                }
-                                
-                                if let description = article.articleDescription {
-                                    Text(description.unhtml())
-                                        .font(.callout)
-                                        .lineLimit(Int(descriptionMaxLines))
+                    }
+                    NavigationLink(
+                        destination: ArticleView(article: article, channel: channel, persistenceProvider: persistenceProvider, refreshData: refreshData),
+                        tag: article,
+                        selection: $selectedArticle
+                    ) {
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Text(article.title!)
+                                    .font(.headline)
+                                    .lineLimit(1)
+                                if let date = article.date {
+                                    Spacer()
+                                    Text(date, style: .date)
+                                        .font(.subheadline)
                                         .foregroundColor(.secondary)
                                 }
                             }
+                            
+                            if let description = article.articleDescription {
+                                Text(description.unhtml())
+                                    .font(.callout)
+                                    .lineLimit(Int(descriptionMaxLines))
+                                    .foregroundColor(.secondary)
+                            }
                         }
                     }
-                    Divider()
                 }
+                Divider()
             }.navigationTitle(channel.title ?? "untitled")
             .navigationSubtitle(channel.channelDescription ?? "")
         } else {
