@@ -13,6 +13,9 @@ import FeedKit
 @main
 struct ReedApp: App {
     
+    @AppStorage("autoUpdate") private var autoUpdate = true
+    @AppStorage("updateInterval") private var updateInterval = 5.0
+    
     let persistenceProvider = PersistenceProvider(ctx: PersistenceController.shared.container.viewContext)
     
     @State private var selectedChannel: Channel? = nil
@@ -23,11 +26,6 @@ struct ReedApp: App {
     @State private var showBookmarksOnly = false
     @State private var refreshing: Bool = false
     @State private var updater: Bool = false
-    
-    init () {
-        refreshChannels()
-        refetchAllFeeds()
-    }
     
     func refreshChannels() -> Void {
         if !refreshing {
@@ -173,7 +171,18 @@ struct ReedApp: App {
                     }.disabled(refreshing)
                 }
             }
-            .onAppear(perform: refreshChannels)
+            .onAppear(perform: {
+                refreshChannels()
+                refetchAllFeeds()
+                Timer.scheduledTimer(withTimeInterval: updateInterval * 60, repeats: true) { timer in
+                    if !autoUpdate {
+                        timer.invalidate()
+                    }
+                    print("Running automatic update...")
+                    refreshChannels()
+                    refetchAllFeeds()
+                }
+            })
         }
         #if os(macOS)
         Settings {
