@@ -30,23 +30,20 @@ struct Sidebar: View {
         }
         return articlesForChannel
     }
-
+    
     var body: some View {
-        List(selection: $selectedChannel) {
-            ForEach(allChannels, id: \.id) { channel in
-                if(channel.title != nil) {
-                    
-                    NavigationLink(
-                        destination: ChannelView(
-                            articles: getArticlesForChannel(id: channel.id!),
-                            channel: channel,
-                            persistenceProvider: persistenceProvider,
-                            refreshData: refreshData,
-                            selectedArticle: $selectedArticle
-                        )
-                    ) {
-                        Text(verbatim: channel.title!).font(.headline)
-                    }
+        List(allChannels, id: \.id, selection: $selectedChannel) { channel in
+            if(channel.title != nil) {
+                NavigationLink(
+                    destination: ChannelView(
+                        articles: getArticlesForChannel(id: channel.id!),
+                        channel: channel,
+                        persistenceProvider: persistenceProvider,
+                        refreshData: refreshData,
+                        selectedArticle: $selectedArticle
+                    )
+                ) {
+                    Text(verbatim: channel.title!).font(.headline)
                 }
             }
         }.listStyle(SidebarListStyle())
