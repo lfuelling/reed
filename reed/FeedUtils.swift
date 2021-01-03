@@ -16,7 +16,7 @@ class FeedUtils {
         self.persistenceProvider = persistenceProvider
     }
     
-    func fetchAndPersistFeed(feedUrl: URL, callback: @escaping () -> Void) {
+    func fetchAndPersistFeed(feedUrl: URL, callback: @escaping (_ error: String?) -> Void) {
         
         let parser = FeedParser(URL: feedUrl)
         
@@ -26,12 +26,13 @@ class FeedUtils {
             switch result {
             case .success(let feed):
                 var rssFeed: RSSFeed? = nil
+                var error: String? = nil
                 switch feed {
                 case .rss(let feed):
                     rssFeed = feed
                     break
                 default:
-                    print("Currently only RSS is supported!")
+                    error = "Currently only RSS is supported!"
                     break
                 }
                 
@@ -42,13 +43,13 @@ class FeedUtils {
                             self.persistenceProvider.persistFeed(feed: safeFeed, feedUrl: feedUrl)
                             self.persistenceProvider.save {
                                 if !called {
-                                    callback()
+                                    callback(nil)
                                     called = true
                                 }
                             }
                         }
                         if !called {
-                            callback()
+                            callback(error)
                         }
                     })
                 }

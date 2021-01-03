@@ -42,7 +42,10 @@ struct ReedApp: App {
             self.refreshing = true
             allChannels.forEach({channel in
                 if let feedUrl = channel.updateUri {
-                    FeedUtils(persistenceProvider: persistenceProvider).fetchAndPersistFeed(feedUrl: feedUrl, callback: {
+                    FeedUtils(persistenceProvider: persistenceProvider).fetchAndPersistFeed(feedUrl: feedUrl, callback: { error in
+                        if let safeError = error {
+                            print(safeError)
+                        }
                         self.refreshing = false
                         self.refreshChannels()
                     })

@@ -12,6 +12,7 @@ import FeedKit
 struct AddNewChannelSettingsRow: View {
     
     @State private var showingDialog: Bool = false
+    @State private var showingLoader: Bool = false
     @State private var newChannelUrl: String = ""
     @State private var alertMessage: String = "Fetching information..."
     
@@ -22,29 +23,48 @@ struct AddNewChannelSettingsRow: View {
         VStack {
             Text("Add a new Channel").font(.headline)
             HStack {
-                TextField("Feed URL", text: $newChannelUrl)
-                Spacer()
-                Button(action: {
-                    self.showingDialog = true
-                    
-                    let inputUrl = URL(string: newChannelUrl)
-                    
-                    
-                    if let feedUrl = inputUrl {
-                        FeedUtils(persistenceProvider: persistenceProvider).fetchAndPersistFeed(feedUrl: feedUrl, callback: {
-                            newChannelUrl = ""
-                            retrieveChannels()
-                        })
-                    } else {
-                        // TODO: show error
+                if showingLoader {
+                    HStack {
+                        ProgressView()
+                            .frame(width: 32, height: 32)
+                            .progressViewStyle(CircularProgressViewStyle())
                     }
-                    
-                }, label: {
-                    Text("+")
-                }).alert(isPresented: $showingDialog) {
-                    Alert(
-                        title: Text("Adding new Channel..."),
-                        message: Text(alertMessage))
+                } else {
+                    TextField("Feed URL", text: $newChannelUrl)
+                    Spacer()
+                    Button(action: {
+                        self.showingLoader = true
+                        
+                        let inputUrl = URL(string: newChannelUrl)
+                        
+                        if let feedUrl = inputUrl {
+                            FeedUtils(persistenceProvider: persistenceProvider).fetchAndPersistFeed(feedUrl: feedUrl, callback: { error in
+                                if let safeError = error {
+                                    alertMessage = safeError
+                                    showingDialog = true
+                                }
+                                newChannelUrl = ""
+                                retrieveChannels()
+                                showingLoader = false
+                            })
+                        } else {
+                            // TODO: show error
+                            showingLoader = false
+                            showingDialog = true
+                        }
+                        
+                    }, label: {
+                        Text("+")
+                    })
+                    .alert(isPresented: $showingDialog) {
+                        Alert(
+                            title: Text("Error!"),
+                            message: Text(alertMessage),
+                            dismissButton: .default(Text("Ok"), action: {
+                                showingDialog = false
+                            })
+                        )
+                    }
                 }
             }
         }
