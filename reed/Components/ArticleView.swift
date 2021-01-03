@@ -75,9 +75,6 @@ struct ArticleView: View {
                     }
                 }
                 Spacer()
-                VStack {
-                    
-                }
             }.padding(16)
             Divider()
             BrowserView(url: getDataUrl())
@@ -107,7 +104,8 @@ html {
     font-family: sans-serif;
     width: 90%;
     overflow-x: hidden;
-    font-size: \(fontSize)px
+    font-size: \(fontSize)px;
+    background: transparent;
 }
 @media (prefers-color-scheme: dark) {
 a {
@@ -115,7 +113,7 @@ a {
     font-family: sans-serif;
 }
 html, body {
-    background: rgb(34,33,35);
+    background: transparent;
     color: #fff;
 }
 }

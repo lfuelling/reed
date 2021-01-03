@@ -21,10 +21,11 @@ struct WebView: NSViewRepresentable {
     }
     
     public func makeNSView(context: NSViewRepresentableContext<WebView>) -> WKWebView {
-        
         webView.navigationDelegate = context.coordinator
         webView.uiDelegate = context.coordinator
         webView.customUserAgent = "Reed / 1.0"
+        webView.setValue(true, forKey: "drawsTransparentBackground")
+        webView.setValue(false, forKey: "drawsBackground")
         return webView
     }
     
@@ -50,7 +51,7 @@ struct WebView: NSViewRepresentable {
             if navigationAction.navigationType == .linkActivated  {
                 if let url = navigationAction.request.url {
                     if NSWorkspace.shared.open(url) {
-                        print("Link opened.")
+                        print("Opening: " + url.absoluteString)
                     }
                     decisionHandler(.cancel)
                 } else {
