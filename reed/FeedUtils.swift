@@ -26,10 +26,14 @@ class FeedUtils {
             switch result {
             case .success(let feed):
                 var rssFeed: RSSFeed? = nil
+                var atomFeed: AtomFeed? = nil
                 var error: String? = nil
                 switch feed {
                 case .rss(let feed):
                     rssFeed = feed
+                    break
+                case .atom(let feed):
+                    atomFeed = feed
                     break
                 default:
                     error = "Currently only RSS is supported!"
@@ -40,6 +44,14 @@ class FeedUtils {
                     var called = false
                     self.persistenceProvider.save(callback: {() -> Void in
                         if let safeFeed = rssFeed {
+                            self.persistenceProvider.persistFeed(feed: safeFeed, feedUrl: feedUrl)
+                            self.persistenceProvider.save {
+                                if !called {
+                                    callback(nil)
+                                    called = true
+                                }
+                            }
+                        } else if let safeFeed = atomFeed {
                             self.persistenceProvider.persistFeed(feed: safeFeed, feedUrl: feedUrl)
                             self.persistenceProvider.save {
                                 if !called {

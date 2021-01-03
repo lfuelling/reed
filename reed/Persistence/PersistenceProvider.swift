@@ -39,6 +39,25 @@ class PersistenceProvider {
         
     }
     
+    func persistFeed(feed: AtomFeed, feedUrl: URL) {
+        let imageId = channels.generateImage(feed: feed)
+        if let channelId = channels.generate(feedURL: feedUrl, imageId: imageId, feed: feed) {
+            print("Successfully updated channel '" + channelId.uuidString + "'!")
+            
+            feed.entries?.forEach({item in
+                if let articleId = articles.generate(channelId: channelId, item: item) {
+                    print("Successfully updated article '" + articleId.uuidString + "'!")
+                } else {
+                    print("Unable to generate article!")
+                }
+            })
+            
+        } else {
+            print("Unable to generate channel: '" + feedUrl.absoluteString + "'!")
+        }
+        
+    }
+    
     func save(callback: () -> Void) {
         if ctx.hasChanges {
             print("Saving data...")

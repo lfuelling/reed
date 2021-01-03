@@ -33,7 +33,26 @@ class ChannelPersistenceProvider {
         return nil
     }
     
-    func getExistingOrNew(feedUrl: URL, feed: RSSFeed) -> NSManagedObject {
+    func generateImage(feed: AtomFeed) -> UUID? {
+        // TODO: detect duplicates and only update instead
+        if(feed.icon != nil) {
+            let id = UUID()
+            self.ctx.perform {
+                let channelImageEntity = NSEntityDescription.entity(forEntityName: "ChannelImage", in: self.ctx)
+                let ci = NSManagedObject(entity: channelImageEntity!, insertInto: self.ctx)
+                ci.setValue(id, forKey: "id")
+                if let safeIcon = feed.icon {
+                    ci.setValue(safeIcon, forKey: "url")
+                } else if let safeLogo = feed.logo {
+                    ci.setValue(safeLogo, forKey: "url")
+                }
+            }
+            return id
+        }
+        return nil
+    }
+    
+    func getExistingOrNew(feedUrl: URL) -> NSManagedObject {
         var c: NSManagedObject? = nil
         var id: UUID? = nil
         
@@ -73,8 +92,16 @@ class ChannelPersistenceProvider {
         return nil
     }
     
+    private func getLinkUri(channel: AtomFeed) -> URL? {
+        if let safeLink = channel.links?[0].attributes?.href {
+            // TODO: Maybe not just use the first link but that's enough for now I guess...
+            return URL(string: safeLink)
+        }
+        return nil
+    }
+    
     func generate(feedURL: URL, imageId: UUID?, feed: RSSFeed) -> UUID? {
-        let c = getExistingOrNew(feedUrl: feedURL, feed: feed)
+        let c = getExistingOrNew(feedUrl: feedURL)
         
         c.setValue(feed.title ?? feedURL.absoluteString, forKey: "title")
         c.setValue(feed.description, forKey: "channelDescription")
@@ -83,6 +110,27 @@ class ChannelPersistenceProvider {
         c.setValue(feed.generator, forKey: "generator")
         c.setValue(feed.lastBuildDate, forKey: "lastBuildDate")
         c.setValue(feed.ttl, forKey: "ttl")
+        c.setValue(feedURL, forKey: "updateUri")
+        
+        let id = c.value(forKey: "id") as! UUID
+        if ctx.hasChanges {
+            do {
+                try ctx.save()
+            } catch {
+                print("Error saving!")
+            }
+        }
+        return id
+    }
+    
+    func generate(feedURL: URL, imageId: UUID?, feed: AtomFeed) -> UUID? {
+        let c = getExistingOrNew(feedUrl: feedURL)
+        
+        c.setValue(feed.title ?? feedURL.absoluteString, forKey: "title")
+        c.setValue(feed.subtitle?.value, forKey: "channelDescription")
+        c.setValue(getLinkUri(channel: feed), forKey: "link")
+        c.setValue(imageId, forKey: "channelImageId")
+        c.setValue(feed.generator?.value, forKey: "generator")
         c.setValue(feedURL, forKey: "updateUri")
         
         let id = c.value(forKey: "id") as! UUID
