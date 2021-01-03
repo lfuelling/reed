@@ -78,7 +78,9 @@ struct ArticleView: View {
             }.padding(16)
             Divider()
             BrowserView(url: getDataUrl())
-        }.onAppear(perform: {
+        }
+        .frame(minWidth: 600)
+        .onAppear(perform: {
             if !article.read {
                 article.read = true
                 persistenceProvider.save {

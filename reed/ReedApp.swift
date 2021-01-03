@@ -77,10 +77,10 @@ struct ReedApp: App {
                     selectedArticle: $selectedArticle
                 ))
             } else {
-                return AnyView(Text("Channel not found..."))
+                return AnyView(Text("Channel not found...").frame(minWidth: 300))
             }
         } else {
-            return AnyView(Text("Select channel..."))
+            return AnyView(Text("Select channel...").frame(minWidth: 300))
             
         }
     }
@@ -106,7 +106,9 @@ struct ReedApp: App {
                     }
                 }
             }
-        }.listStyle(SidebarListStyle())
+        }
+        .listStyle(SidebarListStyle())
+        .frame(minWidth: 150)
     }
     
     private func getArticlesForChannel(id: UUID) -> [Article] {

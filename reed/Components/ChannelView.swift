@@ -83,10 +83,12 @@ struct ChannelView: View {
                 }.padding(0)
             }.navigationTitle(channel.title ?? "untitled")
             .navigationSubtitle(channel.channelDescription ?? "")
+            .frame(minWidth: 300)
         } else {
             Text("No articles...")
                 .navigationTitle(channel.title ?? "untitled")
                 .navigationSubtitle(channel.channelDescription ?? "")
+                .frame(minWidth: 300)
         }
     }
 }
