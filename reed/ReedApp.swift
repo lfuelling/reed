@@ -51,7 +51,7 @@ struct ReedApp: App {
         }
     }
     
-    private func getArticleView() -> some View {
+    private func getArticleView(updater: Bool) -> some View {
         if let article = selectedArticle {
             return AnyView(ArticleView(
                 article: article,
@@ -65,7 +65,7 @@ struct ReedApp: App {
         }
     }
     
-    private func getChannelView() -> some View {
+    private func getChannelView(updater: Bool) -> some View {
         if let channelId = selectedChannel?.id {
             if let channel = persistenceProvider.channels.getById(id: channelId) {
                 return AnyView(ChannelView(
@@ -85,7 +85,7 @@ struct ReedApp: App {
         }
     }
     
-    private func getSidebarView() -> some View {
+    private func getSidebarView(updater: Bool) -> some View {
         return List(allChannels, id: \.id, selection: $selectedChannel) { channel in
             if(channel.title != nil) {
                 NavigationLink(
@@ -138,9 +138,9 @@ struct ReedApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                getSidebarView()
-                getChannelView()
-                getArticleView()
+                getSidebarView(updater: updater)
+                getChannelView(updater: updater)
+                getArticleView(updater: updater)
             }.navigationTitle(selectedChannel?.title ?? "reed")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
