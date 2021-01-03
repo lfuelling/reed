@@ -31,23 +31,21 @@ struct ChannelView: View {
         if articles.count > 0 {
             List(articles, id: \.self.id, selection: $selectedArticle) { article in
                 VStack(alignment: .leading) {
-                    HStack(alignment: .center) {
-                        VStack(alignment: .leading) {
-                            if !article.read {
+                    HStack(alignment: .top) {
+                        if !article.read {
+                            Image(systemName: "circle.fill")
+                                .foregroundColor(.accentColor)
+                                .font(.footnote)
+                        } else {
+                            if article.bookmarked {
+                                Image(systemName: "star.fill")
+                                    .foregroundColor(.yellow)
+                                    .font(.footnote)
+                            } else {
                                 Image(systemName: "circle.fill")
                                     .foregroundColor(.accentColor)
                                     .font(.footnote)
-                            } else {
-                                if article.bookmarked {
-                                    Image(systemName: "star.fill")
-                                        .foregroundColor(.yellow)
-                                        .font(.footnote)
-                                } else {
-                                    Image(systemName: "circle.fill")
-                                        .foregroundColor(.accentColor)
-                                        .font(.footnote)
-                                        .opacity(0.0)
-                                }
+                                    .opacity(0.0)
                             }
                         }
                         NavigationLink(
