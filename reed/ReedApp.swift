@@ -174,13 +174,10 @@ struct ReedApp: App {
             .onAppear(perform: {
                 refreshChannels()
                 refetchAllFeeds()
-                Timer.scheduledTimer(withTimeInterval: updateInterval * 60, repeats: true) { timer in
-                    if !autoUpdate {
-                        timer.invalidate()
+                if autoUpdate {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + (updateInterval * 60)) {
+                        automaticUpdate()
                     }
-                    print("Running automatic update...")
-                    refreshChannels()
-                    refetchAllFeeds()
                 }
             })
         }
@@ -189,5 +186,17 @@ struct ReedApp: App {
             SettingsView(persistenceProvider: persistenceProvider, refresh: refetchAllFeeds)
         }
         #endif
+    }
+    
+    private func automaticUpdate() {
+        print("Running automatic update...")
+        refreshChannels()
+        refetchAllFeeds()
+        print("Scheduling next update...")
+        if autoUpdate {
+            DispatchQueue.main.asyncAfter(deadline: .now() + (updateInterval * 60)) {
+                automaticUpdate()
+            }
+        }
     }
 }
