@@ -20,6 +20,8 @@ struct Sidebar: View {
     @Binding var selectedChannel: Channel?
     @Binding var selectedArticle: Article?
     
+    @Binding var updater: Bool
+    
     private func getArticlesForChannel(id: UUID) -> [Article] {
         var articlesForChannel: [Article] = []
         if showBookmarksOnly {
@@ -38,6 +40,7 @@ struct Sidebar: View {
                     destination: ChannelView(
                         articles: getArticlesForChannel(id: channel.id!),
                         channel: channel,
+                        updater: $updater,
                         persistenceProvider: persistenceProvider,
                         refreshData: refreshData,
                         selectedArticle: $selectedArticle

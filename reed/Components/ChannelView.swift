@@ -19,6 +19,7 @@ extension String {
 struct ChannelView: View {
     @State var articles: [Article]
     @State var channel: Channel
+    @Binding var updater: Bool
     let persistenceProvider: PersistenceProvider
     let refreshData: () -> Void
     
@@ -47,7 +48,7 @@ struct ChannelView: View {
                         }
                     }
                     NavigationLink(
-                        destination: ArticleView(article: article, channel: channel, persistenceProvider: persistenceProvider, refreshData: refreshData),
+                        destination: ArticleView(article: article, channel: channel, persistenceProvider: persistenceProvider, refreshData: refreshData, updater: $updater),
                         tag: article,
                         selection: $selectedArticle
                     ) {

@@ -25,6 +25,7 @@ struct ArticleView: View {
 
     let persistenceProvider: PersistenceProvider
     let refreshData: () -> Void
+    @Binding var updater: Bool
     
     private func getSubtitleString(article: Article, channel: Channel) -> String {
         if let channelTitle = channel.title {
@@ -54,6 +55,7 @@ struct ArticleView: View {
                             article.bookmarked = !article.bookmarked
                             persistenceProvider.save {
                                 print("Updated article...")
+                                updater.toggle()
                             }
                         } label: {
                             if(article.bookmarked) {
@@ -84,6 +86,7 @@ struct ArticleView: View {
                 article.read = true
                 persistenceProvider.save {
                     print("Updated article...")
+                    updater.toggle()
                 }
             }
         })

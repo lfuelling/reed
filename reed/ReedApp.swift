@@ -24,6 +24,7 @@ struct ReedApp: App {
     @State private var articlesForChannel: [Article] = []
     
     @State private var refreshing: Bool = false
+    @State private var updater: Bool = false
     
     func refreshChannels() -> Void {
         if !refreshing {
@@ -63,6 +64,26 @@ struct ReedApp: App {
         refetchAllFeeds()
     }
     
+    private func getChannelView(updater: Bool) -> some View {
+        if let channelId = selectedChannel?.id {
+            if let channel = persistenceProvider.channels.getById(id: channelId) {
+                return AnyView(ChannelView(
+                    articles: articlesForChannel,
+                    channel: channel,
+                    updater: $updater,
+                    persistenceProvider: persistenceProvider,
+                    refreshData: refreshChannels,
+                    selectedArticle: $selectedArticle
+                ))
+            } else {
+                return AnyView(Text("Channel not found..."))
+            }
+        } else {
+            return AnyView(Text("Select channel..."))
+            
+        }
+    }
+    
     var body: some Scene {
         WindowGroup {
             NavigationView {
@@ -71,31 +92,19 @@ struct ReedApp: App {
                     refreshData: refreshChannels,
                     allChannels: allChannels,
                     selectedChannel: $selectedChannel,
-                    selectedArticle: $selectedArticle
+                    selectedArticle: $selectedArticle,
+                    updater: $updater
                 )
                 
-                if let channelId = selectedChannel?.id {
-                    if let channel = persistenceProvider.channels.getById(id: channelId) {
-                        ChannelView(
-                            articles: articlesForChannel,
-                            channel: channel,
-                            persistenceProvider: persistenceProvider,
-                            refreshData: refreshChannels,
-                            selectedArticle: $selectedArticle
-                        )
-                    } else {
-                        Text("Channel not found...")
-                    }
-                } else {
-                    Text("Select channel...")
-                }
+                getChannelView(updater: updater)
                 
                 if let article = selectedArticle {
                     ArticleView(
                         article: article,
                         channel: persistenceProvider.channels.getById(id: article.channelId!)!,
                         persistenceProvider: persistenceProvider,
-                        refreshData: refreshChannels
+                        refreshData: refreshChannels,
+                        updater: $updater
                     )
                 } else {
                     Text("Select article...")
@@ -118,7 +127,7 @@ struct ReedApp: App {
                             refreshChannels()
                             refetchAllFeeds()
                         } label: {
-                            if(refreshing) {
+                            if refreshing {
                                 Image(systemName: "hourglass")
                             } else {
                                 Image(systemName: "arrow.triangle.2.circlepath")
