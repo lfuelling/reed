@@ -33,6 +33,21 @@ struct Sidebar: View {
         return articlesForChannel
     }
     
+    private func getUnreadIndicator(channel: Channel) -> some View {
+        let unreadCount = getArticlesForChannel(id: channel.id!).filter({ a in
+            return !a.read
+        }).count
+        
+        if(unreadCount > 0) {
+            return AnyView(Text(String(unreadCount))
+                            .font(.subheadline)
+                            .padding(4)
+                            .background(Color.secondary.opacity(0.4))
+                            .clipShape(RoundedRectangle(cornerRadius: 7)))
+        }
+        return AnyView(Text("").opacity(0))
+    }
+    
     var body: some View {
         List(allChannels, id: \.id, selection: $selectedChannel) { channel in
             if(channel.title != nil) {
@@ -46,7 +61,12 @@ struct Sidebar: View {
                         selectedArticle: $selectedArticle
                     )
                 ) {
-                    Text(verbatim: channel.title!).font(.headline)
+                    HStack {
+                        Text(verbatim: channel.title!)
+                            .font(.headline)
+                        Spacer()
+                        getUnreadIndicator(channel: channel)
+                    }
                 }
             }
         }.listStyle(SidebarListStyle())
