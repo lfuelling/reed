@@ -17,14 +17,14 @@ extension String {
 }
 
 struct ChannelView: View {
-    @State var articles: [Article]
-    @State var channel: Channel
+    let articles: [Article]
+    let channel: Channel
     @Binding var updater: Bool
     let persistenceProvider: PersistenceProvider
     let refreshData: () -> Void
     
     @Binding var selectedArticle: Article?
-    
+
     @AppStorage("descriptionMaxLines") private var descriptionMaxLines = 3.0
     
     var body: some View {

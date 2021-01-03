@@ -13,34 +13,26 @@ import FeedKit
 @main
 struct ReedApp: App {
     
-    @AppStorage("showBookmarksOnly") private var showBookmarksOnly = false
-    
     let persistenceProvider = PersistenceProvider(ctx: PersistenceController.shared.container.viewContext)
     
     @State private var selectedChannel: Channel? = nil
     @State private var selectedArticle: Article? = nil
     
     @State private var allChannels: [Channel] = []
-    @State private var articlesForChannel: [Article] = []
-    
+
+    @State private var showBookmarksOnly = false
     @State private var refreshing: Bool = false
     @State private var updater: Bool = false
+    
+    init () {
+        refreshChannels()
+        refetchAllFeeds()
+    }
     
     func refreshChannels() -> Void {
         if !refreshing {
             print("Reloading channels...")
             allChannels = persistenceProvider.channels.getAll()
-            
-            if let channelId = selectedChannel?.id {
-                selectedChannel = persistenceProvider.channels.getById(id: channelId)
-                
-                if showBookmarksOnly {
-                    articlesForChannel = persistenceProvider.articles.getByChannelId(channelId: channelId)
-                        .filter({ (a) -> Bool in return a.bookmarked })
-                } else {
-                    articlesForChannel = persistenceProvider.articles.getByChannelId(channelId: channelId)
-                }
-            }
         }
     }
     
@@ -59,16 +51,25 @@ struct ReedApp: App {
         }
     }
     
-    init () {
-        refreshChannels()
-        refetchAllFeeds()
+    private func getArticleView() -> some View {
+        if let article = selectedArticle {
+            return AnyView(ArticleView(
+                article: article,
+                channel: persistenceProvider.channels.getById(id: article.channelId!)!,
+                persistenceProvider: persistenceProvider,
+                refreshData: refreshChannels,
+                updater: $updater
+            ))
+        } else {
+            return AnyView(Text("Select article..."))
+        }
     }
     
-    private func getChannelView(updater: Bool) -> some View {
+    private func getChannelView() -> some View {
         if let channelId = selectedChannel?.id {
             if let channel = persistenceProvider.channels.getById(id: channelId) {
                 return AnyView(ChannelView(
-                    articles: articlesForChannel,
+                    articles: getArticlesForChannel(id: channelId),
                     channel: channel,
                     updater: $updater,
                     persistenceProvider: persistenceProvider,
@@ -84,56 +85,87 @@ struct ReedApp: App {
         }
     }
     
+    private func getSidebarView() -> some View {
+        return List(allChannels, id: \.id, selection: $selectedChannel) { channel in
+            if(channel.title != nil) {
+                NavigationLink(
+                    destination: ChannelView(
+                        articles: getArticlesForChannel(id: channel.id!),
+                        channel: channel,
+                        updater: $updater,
+                        persistenceProvider: persistenceProvider,
+                        refreshData: refreshChannels,
+                        selectedArticle: $selectedArticle
+                    )
+                ) {
+                    HStack {
+                        Text(verbatim: channel.title!)
+                            .font(.headline)
+                        Spacer()
+                        getUnreadIndicator(channel: channel)
+                    }
+                }
+            }
+        }.listStyle(SidebarListStyle())
+    }
+    
+    private func getArticlesForChannel(id: UUID) -> [Article] {
+        var articlesForChannel: [Article] = []
+        if showBookmarksOnly {
+            articlesForChannel = persistenceProvider.articles.getByChannelId(channelId: id)
+                .filter({ (a) -> Bool in return a.bookmarked })
+        } else {
+            articlesForChannel = persistenceProvider.articles.getByChannelId(channelId: id)
+        }
+        return articlesForChannel
+    }
+    
+    private func getUnreadIndicator(channel: Channel) -> some View {
+        let unreadCount = persistenceProvider.articles.getByChannelId(channelId: channel.id!).filter({ a in
+            return !a.read
+        }).count
+        
+        if(unreadCount > 0) {
+            return AnyView(Text(String(unreadCount))
+                            .font(.subheadline)
+                            .padding(4)
+                            .background(Color.secondary.opacity(0.4))
+                            .clipShape(RoundedRectangle(cornerRadius: 7)))
+        }
+        return AnyView(Text("").opacity(0))
+    }
+    
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                Sidebar (
-                    persistenceProvider: persistenceProvider,
-                    refreshData: refreshChannels,
-                    allChannels: allChannels,
-                    selectedChannel: $selectedChannel,
-                    selectedArticle: $selectedArticle,
-                    updater: $updater
-                )
-                
-                getChannelView(updater: updater)
-                
-                if let article = selectedArticle {
-                    ArticleView(
-                        article: article,
-                        channel: persistenceProvider.channels.getById(id: article.channelId!)!,
-                        persistenceProvider: persistenceProvider,
-                        refreshData: refreshChannels,
-                        updater: $updater
-                    )
-                } else {
-                    Text("Select article...")
-                }
+                getSidebarView()
+                getChannelView()
+                getArticleView()
             }.navigationTitle(selectedChannel?.title ?? "reed")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    HStack {
-                        Button {
-                            showBookmarksOnly = !showBookmarksOnly
-                            refreshChannels()
-                        } label: {
-                            if(showBookmarksOnly) {
-                                Image(systemName: "star.fill")
-                            } else {
-                                Image(systemName: "star")
-                            }
+                    Button {
+                        showBookmarksOnly = !showBookmarksOnly
+                        refreshChannels()
+                    } label: {
+                        if(showBookmarksOnly) {
+                            Image(systemName: "star.fill")
+                        } else {
+                            Image(systemName: "star")
                         }
-                        Button {
-                            refreshChannels()
-                            refetchAllFeeds()
-                        } label: {
-                            if refreshing {
-                                Image(systemName: "hourglass")
-                            } else {
-                                Image(systemName: "arrow.triangle.2.circlepath")
-                            }
-                        }.disabled(refreshing)
                     }
+                }
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        refreshChannels()
+                        refetchAllFeeds()
+                    } label: {
+                        if refreshing {
+                            Image(systemName: "hourglass")
+                        } else {
+                            Image(systemName: "arrow.triangle.2.circlepath")
+                        }
+                    }.disabled(refreshing)
                 }
             }
             .onAppear(perform: refreshChannels)

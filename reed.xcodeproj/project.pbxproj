@@ -22,7 +22,6 @@
 		CAFAC8262590FAF90094B699 /* reedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC8252590FAF90094B699 /* reedTests.swift */; };
 		CAFAC8312590FAF90094B699 /* reedUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC8302590FAF90094B699 /* reedUITests.swift */; };
 		CAFAC84C2590FDD50094B699 /* DummyStores.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC84B2590FDD50094B699 /* DummyStores.swift */; };
-		CAFAC8512590FF710094B699 /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC8502590FF710094B699 /* Sidebar.swift */; };
 		CAFAC857259101D90094B699 /* ChannelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC856259101D90094B699 /* ChannelView.swift */; };
 		CAFAC860259104720094B699 /* ArticleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC85F259104720094B699 /* ArticleView.swift */; };
 		CAFAC88425910E1B0094B699 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFAC88325910E1B0094B699 /* SettingsView.swift */; };
@@ -72,7 +71,6 @@
 		CAFAC8302590FAF90094B699 /* reedUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reedUITests.swift; sourceTree = "<group>"; };
 		CAFAC8322590FAF90094B699 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CAFAC84B2590FDD50094B699 /* DummyStores.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyStores.swift; sourceTree = "<group>"; };
-		CAFAC8502590FF710094B699 /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
 		CAFAC856259101D90094B699 /* ChannelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelView.swift; sourceTree = "<group>"; };
 		CAFAC85F259104720094B699 /* ArticleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleView.swift; sourceTree = "<group>"; };
 		CAFAC88325910E1B0094B699 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -198,7 +196,6 @@
 			isa = PBXGroup;
 			children = (
 				CAFAC88825910EF10094B699 /* Settings */,
-				CAFAC8502590FF710094B699 /* Sidebar.swift */,
 				CAFAC856259101D90094B699 /* ChannelView.swift */,
 				CAFAC85F259104720094B699 /* ArticleView.swift */,
 				CAE9ABAC2591973C00344689 /* WebView.swift */,
@@ -368,7 +365,6 @@
 				CAFAC88A25910EFE0094B699 /* GeneralSettingsView.swift in Sources */,
 				CAE9ABAD2591973C00344689 /* WebView.swift in Sources */,
 				CAFAC89225910F100094B699 /* ChannelSettingsView.swift in Sources */,
-				CAFAC8512590FF710094B699 /* Sidebar.swift in Sources */,
 				CAFAC857259101D90094B699 /* ChannelView.swift in Sources */,
 				CAE9AB802591434500344689 /* AddNewChannelSettingsRow.swift in Sources */,
 				CAFAC89825910F220094B699 /* AdvancedSettingsView.swift in Sources */,
