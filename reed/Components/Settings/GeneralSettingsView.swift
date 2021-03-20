@@ -14,6 +14,7 @@ struct GeneralSettingsView: View {
     @AppStorage("autoUpdate") private var autoUpdate = true
     @AppStorage("fontSize") private var fontSize = 14.0
     @AppStorage("descriptionMaxLines") private var descriptionMaxLines = 3.0
+    @AppStorage("titleMaxLines") private var titleMaxLines = 1.0
     @AppStorage("updateInterval") private var updateInterval = 5.0
 
     var body: some View {
@@ -26,6 +27,9 @@ struct GeneralSettingsView: View {
                 }
                 Stepper(value: $descriptionMaxLines, in: 1...5) {
                     Text("Max Lines Of Description: \(descriptionMaxLines, specifier: "%.0f")")
+                }
+                Stepper(value: $titleMaxLines, in: 1...4) {
+                    Text("Max Lines Of Title: \(titleMaxLines, specifier: "%.0f")")
                 }
                 Toggle("Automatic updates", isOn: $autoUpdate)
                 Stepper(value: $updateInterval, in: 1...60) {

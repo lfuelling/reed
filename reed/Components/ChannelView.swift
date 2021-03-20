@@ -26,6 +26,7 @@ struct ChannelView: View {
     @Binding var selectedArticle: Article?
 
     @AppStorage("descriptionMaxLines") private var descriptionMaxLines = 3.0
+    @AppStorage("titleMaxLines") private var titleMaxLines = 1.0
     
     var body: some View {
         if articles.count > 0 {
@@ -57,7 +58,7 @@ struct ChannelView: View {
                                 HStack {
                                     Text(article.title!)
                                         .font(.headline)
-                                        .lineLimit(1)
+                                        .lineLimit(Int(titleMaxLines))
                                     if let date = article.date {
                                         Spacer()
                                         Text(date, style: .date)
